@@ -56,6 +56,16 @@
   border-radius: 20px;;
 }
 
+.why-pennydao-container {
+  margin: 36px 0 0 0;
+}
+
+.why-box-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
 
@@ -82,6 +92,12 @@
     bottom: 0;
     max-width: 100%;
     max-height: auto;
+  }
+
+  .why-box-container {
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
   }
 }
 

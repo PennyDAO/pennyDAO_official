@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import NavBar from "./components/NavBar/NavBar.js";
-import landingImage from './images/landing-page.png';
 import LandingAnimation from './components/LandingAnimation/LandingAnimation.js'
+import WhyBox from './components/WhyBox/WhyBox.js';
+import Footer from './components/Footer/Footer.js'
 import './App.css';
 
 function App() {
+
   return (
     <div className="App">
       <NavBar />
@@ -21,7 +23,22 @@ function App() {
       </div>
       <div className='why-pennydao-container'>
         <h1>Why PennyDAO?</h1>
+        <div className='why-box-container'>
+          <WhyBox
+            title='Instant Yield Generation'
+            description='Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+            color='#CEAF7F' />
+          <WhyBox
+            title='Instant Yield Generation'
+            description='Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+            color='#877C6E' />
+          <WhyBox
+            title='Instant Yield Generation'
+            description='Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+            color='#A58C6E' />
+        </div>
       </div>
+      <Footer />
     </div>
   );
 }
