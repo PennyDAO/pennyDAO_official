@@ -1,24 +1,23 @@
 {
   "files": {
-    "main.css": "/pennyDAO_official/static/css/main.bebe633d.chunk.css",
-    "main.js": "/pennyDAO_official/static/js/main.c9cf0e67.chunk.js",
-    "main.js.map": "/pennyDAO_official/static/js/main.c9cf0e67.chunk.js.map",
-    "runtime-main.js": "/pennyDAO_official/static/js/runtime-main.d6ff1f64.js",
-    "runtime-main.js.map": "/pennyDAO_official/static/js/runtime-main.d6ff1f64.js.map",
-    "static/js/2.469881e1.chunk.js": "/pennyDAO_official/static/js/2.469881e1.chunk.js",
-    "static/js/2.469881e1.chunk.js.map": "/pennyDAO_official/static/js/2.469881e1.chunk.js.map",
-    "static/js/3.4e28e30e.chunk.js": "/pennyDAO_official/static/js/3.4e28e30e.chunk.js",
-    "static/js/3.4e28e30e.chunk.js.map": "/pennyDAO_official/static/js/3.4e28e30e.chunk.js.map",
+    "main.css": "/pennyDAO_official/static/css/main.50198c9f.chunk.css",
+    "main.js": "/pennyDAO_official/static/js/main.780931be.chunk.js",
+    "main.js.map": "/pennyDAO_official/static/js/main.780931be.chunk.js.map",
+    "runtime-main.js": "/pennyDAO_official/static/js/runtime-main.5f8c1541.js",
+    "runtime-main.js.map": "/pennyDAO_official/static/js/runtime-main.5f8c1541.js.map",
+    "static/js/2.ec56d397.chunk.js": "/pennyDAO_official/static/js/2.ec56d397.chunk.js",
+    "static/js/2.ec56d397.chunk.js.map": "/pennyDAO_official/static/js/2.ec56d397.chunk.js.map",
+    "static/js/3.2f6c99ac.chunk.js": "/pennyDAO_official/static/js/3.2f6c99ac.chunk.js",
+    "static/js/3.2f6c99ac.chunk.js.map": "/pennyDAO_official/static/js/3.2f6c99ac.chunk.js.map",
     "index.html": "/pennyDAO_official/index.html",
-    "static/css/main.bebe633d.chunk.css.map": "/pennyDAO_official/static/css/main.bebe633d.chunk.css.map",
-    "static/js/2.469881e1.chunk.js.LICENSE.txt": "/pennyDAO_official/static/js/2.469881e1.chunk.js.LICENSE.txt",
-    "static/media/landing-page.526c35ed.png": "/pennyDAO_official/static/media/landing-page.526c35ed.png",
+    "static/css/main.50198c9f.chunk.css.map": "/pennyDAO_official/static/css/main.50198c9f.chunk.css.map",
+    "static/js/2.ec56d397.chunk.js.LICENSE.txt": "/pennyDAO_official/static/js/2.ec56d397.chunk.js.LICENSE.txt",
     "static/media/pennyDAO_logo.b374cfb6.png": "/pennyDAO_official/static/media/pennyDAO_logo.b374cfb6.png"
   },
   "entrypoints": [
-    "static/js/runtime-main.d6ff1f64.js",
-    "static/js/2.469881e1.chunk.js",
-    "static/css/main.bebe633d.chunk.css",
-    "static/js/main.c9cf0e67.chunk.js"
+    "static/js/runtime-main.5f8c1541.js",
+    "static/js/2.ec56d397.chunk.js",
+    "static/css/main.50198c9f.chunk.css",
+    "static/js/main.780931be.chunk.js"
   ]
 }
