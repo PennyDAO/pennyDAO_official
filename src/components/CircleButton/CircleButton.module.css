@@ -1,0 +1,15 @@
+.container {
+    border-radius: 50%;
+    background-color: #CEAF7F;
+    width: 50px;
+    height: 50px;
+    border: none;
+}
+
+.disabledContainer {
+    border-radius: 50%;
+    background-color: #C2C2C2;
+    width: 50px;
+    height: 50px;
+    border: none;
+}

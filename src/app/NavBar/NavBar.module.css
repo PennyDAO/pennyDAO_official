@@ -43,7 +43,7 @@ img {
     z-index: 100;
 }
 
-label{
+.label {
     display:flex;
     flex-direction:column;
     width: 40px;
@@ -51,7 +51,7 @@ label{
     cursor:pointer;
 }
 
-label span{
+.label span{
     background: black;
     border-radius: 10px;
     height: 4px;
@@ -112,21 +112,7 @@ input[type="checkbox"]:checked ~ span:nth-of-type(3){
     display: flex;
     align-items: center;
     justify-content: center;
-    -webkit-animation: linear infinite;
-    -webkit-animation-name: scroll;
-    -webkit-animation-duration: 5s;
-}
-
-@-webkit-keyframes scroll {
-    0% {
-        left: 100%;
-    }
-    50% {
-        left: 0
-    }
-    100% {
-        left: 100%;    
-    }
+    transition: left 0.3s ease-out;
 }
 
 .mobileNavMenu ul {
@@ -144,19 +130,20 @@ input[type="checkbox"]:checked ~ span:nth-of-type(3){
 .mobileNavMenu ul li a {
     font-size: 2rem;
     padding: 8px 8px;
+    position: relative;
 }
 
-/* .mobileNavMenu ul li:nth-child(1) {
-    color: white;
+.mobileNavMenu ul li a:nth-child(1) {
+    transition: opacity 0.3s ease-out;
 }
 
-.mobileNavMenu ul li:nth-child(2) {
-    color: white;
+.mobileNavMenu ul li a:nth-child(2) {
+    transition: opacity 0.5s ease-out;
 }
 
-.mobileNavMenu ul li:nth-child(3) {
-    color: white;
-} */
+.mobileNavMenu ul li a:nth-child(3) {
+    transition: opacity 0.7s ease-out;
+}
 
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
@@ -196,6 +183,10 @@ input[type="checkbox"]:checked ~ span:nth-of-type(3){
     
     nav ul li a:first-child {
         padding: 8px 32px 8px 96px;
+    }
+
+    .mobileNavMenu {
+        display: none;
     }
 }
 

@@ -1,0 +1,19 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    margin: 15px 0;
+    flex: 1;
+}
+
+label {
+    color: #877C6E;
+}
+
+input[type=text] {
+    background-color: #F7F2EA;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.25);
+    height: 1.5rem;
+}
