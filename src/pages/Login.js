@@ -6,6 +6,8 @@ import CircleButton from '../components/CircleButton/CircleButton';
 
 import { useAuth } from '../hooks/AuthContext';
 import { Link, useHistory } from "react-router-dom"
+import NavBar from '../app/NavBar/NavBar';
+import Footer from '../components/Footer/Footer';
 
 
 const Login = () => {
@@ -37,6 +39,7 @@ const Login = () => {
 
     return(
         <div>
+            <NavBar />
             <h1>Welcome back to PennyDAO!</h1>
             <WrapperBox>
                 <h1>Login</h1> 
@@ -47,6 +50,7 @@ const Login = () => {
                     <CircleButton disabled={!(email && password)} onClick={e => handleSubmit(e)}/>
                 </div>  
             </WrapperBox>
+            <Footer />
         </div>
     );
 }

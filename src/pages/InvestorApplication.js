@@ -1,7 +1,12 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, useHistory } from "react-router-dom"
 import FormInput from '../components/FormInput/FormInput';
 import ApplicationBox from '../components/ApplicationBox/ApplicationBox';
+import CircleButton from '../components/CircleButton/CircleButton';
+import { useAuth } from '../hooks/AuthContext';
+import app from '../firebase';
+import NavBar from '../app/NavBar/NavBar';
+import Footer from '../components/Footer/Footer';
 
 const InvestorApplication = ({location}) => {
 
@@ -18,12 +23,67 @@ const InvestorApplication = ({location}) => {
     const [linkedIn, setLinkedIn] = useState('');
     const [other, setOther] = useState('');
     const [walletAddress, setWalletAddress] = useState('');
+    const [password, setPassword] = useState('');
     const [grantAmount, setGrantAmount] = useState('');
+    const [youtube, setYoutube] = useState('');
+    const [error, setError] = useState('');
+    const [loading, setLoading] = useState(false);
 
+    const { signup } = useAuth();
     const history = useHistory();
+
+    useEffect(() => {
+        setEmail(location.state.state.email);
+        setPassword(location.state.state.password);
+    }, []);
+
+    async function handleSubmit(e) {
+        e.preventDefault()
+    
+        // TODO : Error Checking
+        console.log(email);
+        console.log(twitter);
+        try {
+            setError("")
+            setLoading(true)
+            await signup(email, password)
+
+            const userRef = app.firestore().collection('users');
+            userRef.doc(email).set({
+                firstName,
+                lastName,
+                email,
+                phone,
+                university,
+                major,
+                gradYear,
+                description,
+                twitter,
+                instagram,
+                linkedIn,
+                other,
+                walletAddress,
+                grantAmount: '0',
+                role: 'Investor'
+            })
+            .then(() => {
+                console.log('Document successfully written');
+            })
+            .catch(error => {
+                console.error('Error writing document: ', error);
+            }) 
+
+            history.push("/dashboard");
+        } catch {
+            setError("Failed to create an account")
+        }
+    
+        setLoading(false)
+    }
 
     return(
         <div>
+            <NavBar />
             <h1>Your PennyDAO Application</h1>
             <ApplicationBox>
                 <div className='form-input-divider'>
@@ -49,7 +109,11 @@ const InvestorApplication = ({location}) => {
                     <FormInput title='Other.' value={other} setValue={setOther}/>
                 </div>
                 <FormInput title='Ethereum Wallet Address' value={walletAddress} setValue={setWalletAddress}/>
+                <div style={{display: 'flex', justifyContent: 'flex-end', marginTop: '30px'}}>
+                    <CircleButton onClick={e => { handleSubmit(e) }} />
+                </div>
             </ApplicationBox>
+            <Footer />
         </div>
     )
 }

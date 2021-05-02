@@ -10,9 +10,7 @@ function App() {
   return (
     <AuthProvider>
       <div className="App">
-        <NavBar />
         <Content />
-        <Footer />
       </div>
     </AuthProvider>
     

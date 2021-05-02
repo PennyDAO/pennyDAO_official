@@ -1,13 +1,48 @@
 import React, { useState, useEffect } from 'react';
 import {Link, NavLink, useHistory} from 'react-router-dom';
-import styles from './NavBar.module.css';
+import styles from './SideNavBar.module.css';
 import Logo from '../../images/pennyDAO_logo.png';
 import { useAuth } from '../../hooks/AuthContext';
+import { ReactComponent as ProfileLogo } from '../../images/profile.svg'
+import { ReactComponent as StudentsLogo } from '../../images/students.svg'
+import { ReactComponent as GrantStatusLogo } from '../../images/grant-status.svg'
+import { ReactComponent as LogoutLogo } from '../../images/logout.svg'
 
 const PennyDAOLogo = ({onClick}) => {
     return(
         <div className={styles.logo} onClick={onClick}>
             <img src={Logo}/>
+        </div>
+    )
+}
+
+const NavSegment = ({children, to, title}) => {
+    return (
+        <div className={styles.navSegment}>         
+            <NavLink 
+                to={to}
+                className={styles.navLink}
+                activeClassName={styles.navLinkActive}>
+                <div className={styles.navSegmentImage}>
+                   {children}
+                </div>
+                <span>{title}</span>
+            </NavLink>
+        </div>
+    )
+}
+
+const LogoutSegment = ({children, onClick, title}) => {
+    return (
+        <div className={styles.navSegment} onClick={onClick}>         
+            <a 
+                className={styles.navLink}
+                activeClassName={styles.navLinkActive}>
+                <div className={styles.navSegmentImage}>
+                   {children}
+                </div>
+                <span>{title}</span>
+            </a>
         </div>
     )
 }
@@ -43,7 +78,7 @@ const MobileNavMenu = ({isOpen}) => {
     )
 }
 
-const NavBar = () => {
+const SideNavBar = () => {
 
     const [isOpen, setIsOpen] = useState(false);
     const history = useHistory();
@@ -56,52 +91,37 @@ const NavBar = () => {
 
     return(
         <nav className={styles.nav}>
-            
-            <PennyDAOLogo onClick={() => history.push('/')}/>
             <MobileNavMenu isOpen={isOpen}/>
-            <ul>
-                <li>
-                    <a>
-                        Light Paper
-                    </a>
-                </li>
+            <PennyDAOLogo onClick={() => history.push('/')}/>
+            <div className={styles.navButtonContainer}>
                 {
-                !currentUser && 
-                <li>
-                    <NavLink className='nav-link' to='/login'>
-                        Login
-                    </NavLink>
-                </li>
-                }
-                {
-                !currentUser && 
-                <li>
-                    <NavLink className='nav-link' to='/register'>
-                        Register
-                    </NavLink>
-                </li>
+                currentUser && 
+                <NavSegment to='/dashboard' title='Profile'>
+                    <ProfileLogo/>
+                </NavSegment>
                 }
                 {
                 currentUser && 
-                <li>
-                    <NavLink className='nav-link' to='/dashboard'>
-                        Profile
-                    </NavLink>
-                </li>
+                <NavSegment to='/students' title='Students'>
+                    <StudentsLogo/>
+                </NavSegment>
                 }
                 {
                 currentUser && 
-                <li>
-                    <a className='nav-link' onClick={() => {logout(); history.push('/')}}>
-                        Logout
-                    </a>
-                </li>
+                <NavSegment to='/grant-status' title='Grant Status'>
+                    <GrantStatusLogo/>
+                </NavSegment>
                 }
-            </ul>
+                {
+                currentUser && 
+                <LogoutSegment onClick={() => {logout(); history.push('/')}} title='Logout'>
+                    <LogoutLogo/>
+                </LogoutSegment>
+                }
+            </div>
             <Hambuger onClick={() => {setIsOpen(!isOpen); !isOpen ? document.body.style.overflow = 'hidden' : document.body.style.overflow = 'initial';}}/>
         </nav>
     )
 }
 
-export default NavBar;
-
+export default SideNavBar;

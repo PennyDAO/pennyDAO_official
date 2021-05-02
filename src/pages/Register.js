@@ -9,6 +9,8 @@ import { useAuth } from '../hooks/AuthContext';
 import { Link, useHistory } from "react-router-dom"
 
 import CircleButton from '../components/CircleButton/CircleButton';
+import NavBar from '../app/NavBar/NavBar';
+import Footer from '../components/Footer/Footer';
 
 const customStyles = {
     content : {
@@ -49,6 +51,7 @@ const Register = () => {
 
     return(
         <div>
+            <NavBar />
             <h1>New to PennyDAO?</h1>
             <WrapperBox>
                 <form>
@@ -96,12 +99,13 @@ const Register = () => {
                                 Investor
                             </button>
                             <div style={{display: 'flex', justifyContent: 'flex-end', marginTop: '30px'}}>
-                                <CircleButton disabled={isStudent===null} onClick={e => {e.preventDefault(); isStudent ? history.push('/student-application', {state: {email, password}}) : history.push('/investor-application')}}/>
+                                <CircleButton disabled={isStudent===null} onClick={e => {e.preventDefault(); isStudent ? history.push('/student-application', {state: {email, password}}) : history.push('/investor-application', {state: {email, password}})}}/>
                             </div>
                         </form>
                     </Modal>
                 </form>
             </WrapperBox>
+            <Footer />
         </div>
     );
 }

@@ -1,4 +1,6 @@
 import React from 'react';
+import NavBar from '../app/NavBar/NavBar.js';
+import Footer from '../components/Footer/Footer.js';
 import LandingAnimation from '../components/LandingAnimation/LandingAnimation.js'
 import WhyBox from '../components/WhyBox/WhyBox.js';
 
@@ -6,6 +8,7 @@ const HomePage = () => {
 
     return(
         <div>
+            <NavBar />
             <div className='landing-container'>
                 <div className='title-container'>
                     <h1 className='landing-page-title'>We believe your future starts easier.</h1>
@@ -33,6 +36,7 @@ const HomePage = () => {
                     color='#A58C6E' />
                 </div>
             </div>
+            <Footer />
         </div>
 
     );

@@ -5,6 +5,8 @@ import ApplicationBox from '../components/ApplicationBox/ApplicationBox';
 import CircleButton from '../components/CircleButton/CircleButton';
 import { useAuth } from '../hooks/AuthContext';
 import app from '../firebase';
+import NavBar from '../app/NavBar/NavBar';
+import Footer from '../components/Footer/Footer';
 
 const StudentApplication = ({location}) => {
 
@@ -23,6 +25,7 @@ const StudentApplication = ({location}) => {
     const [walletAddress, setWalletAddress] = useState('');
     const [password, setPassword] = useState('');
     const [grantAmount, setGrantAmount] = useState('');
+    const [youtube, setYoutube] = useState('');
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
@@ -80,6 +83,7 @@ const StudentApplication = ({location}) => {
 
     return(
         <div>
+            <NavBar />
             <h1>Your PennyDAO Application</h1>
             <ApplicationBox>
                 <div className='form-input-divider'>
@@ -109,7 +113,7 @@ const StudentApplication = ({location}) => {
                     <CircleButton onClick={e => { handleSubmit(e) }} />
                 </div>
             </ApplicationBox>
-                
+            <Footer />
         </div>
     )
 }
