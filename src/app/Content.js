@@ -8,7 +8,9 @@ import StudentApplication from '../pages/StudentApplication';
 import InvestorApplication from '../pages/InvestorApplication';
 import Dashboard from "../pages/Dashboard";
 import Students from "../pages/Students";
+import StudentDetails from "../pages/StudentDetails"
 import GrantStatus from "../pages/GrantStatus";
+import Governance from "../pages/Governance";
 
 const Content = () => {
 
@@ -22,6 +24,9 @@ const Content = () => {
                 <Route path="/dashboard" component={Dashboard}/>
                 <Route path="/students" component={Students}/>
                 <Route path="/grant-status" component={GrantStatus}/>
+                <Route path="/governance" component={Governance}/>
+                <Route path="/student/:student_id"
+                                   component={StudentDetails}/>
                 <Route exact path="/" component={Home}/>
             </div>
         </Switch>

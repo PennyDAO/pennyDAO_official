@@ -1,6 +1,4 @@
-import React, { useState } from 'react';
-import NavBar from "./NavBar/NavBar.js";
-import Footer from '../components/Footer/Footer.js';
+import React from 'react';
 import Content from './Content.js';
 import './App.css';
 import { AuthProvider } from "../hooks/AuthContext"

@@ -5,8 +5,7 @@ import FormInput from '../components/FormInput/FormInput';
 
 import Modal from 'react-modal';
 
-import { useAuth } from '../hooks/AuthContext';
-import { Link, useHistory } from "react-router-dom"
+import { useHistory } from "react-router-dom"
 
 import CircleButton from '../components/CircleButton/CircleButton';
 import NavBar from '../app/NavBar/NavBar';
@@ -33,12 +32,11 @@ const Register = () => {
     const [password, setPassword] = useState('');
     const [passwordConfirm, setPasswordConfirm] = useState('');
     const [error, setError] = useState('');
-    const [loading, setLoading] = useState(false);
+    // const [loading, setLoading] = useState(false);
     const [modalIsOpen, setIsOpen] = useState(false);
     const [isStudent, setIsStudent] = useState(null);
 
     const history = useHistory();
-    const { signup } = useAuth();
 
     function openModal(e) {
         setIsOpen(true);

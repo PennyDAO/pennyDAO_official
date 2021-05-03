@@ -99,6 +99,15 @@
   gap: 6%;
 }
 
+.dashboardContainer {
+  padding-left: 0;
+}
+
+.dashBoardWalletContainer {
+  display: flex;
+  justify-content: center;
+}
+
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
 
@@ -131,6 +140,15 @@
     display: flex;
     flex-wrap: wrap;
     flex-direction: row;
+  }
+
+  .dashboardContainer {
+    padding-left: 15%;
+  }
+
+  .dashboardWalletContainer {
+    display: flex;
+    justify-content: flex-end;
   }
 }
 

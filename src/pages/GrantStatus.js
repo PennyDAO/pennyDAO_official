@@ -1,12 +1,12 @@
 import React from 'react';
 import SideNavBar from '../components/SideNavBar/SideNavBar';
-import WalletButton from '../components/WalletButton/WalletButton'
+import WalletButton from '../components/WalletButton/WalletButton';
 
 const GrantStatus = () => {
     return (
-        <div style={{paddingLeft: '15%'}}>
+        <div className='dashboardContainer'>
             <SideNavBar />
-            <div style={{display: 'flex', justifyContent: 'flex-end'}}>
+            <div className='dashboardWalletContainer'>
                 <WalletButton></WalletButton>
             </div>
             Grant Status

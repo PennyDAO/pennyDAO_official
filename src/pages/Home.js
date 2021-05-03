@@ -11,8 +11,8 @@ const HomePage = () => {
             <NavBar />
             <div className='landing-container'>
                 <div className='title-container'>
-                    <h1 className='landing-page-title'>We believe your future starts easier.</h1>
-                    <h2 className='landing-page-subtitle'>A Next Generation Student Loan Borrowing Platform</h2>
+                    <h1 className='landing-page-title'>We believe your impact.</h1>
+                    <h2 className='landing-page-subtitle'>A Next Generation CHANGE-maker</h2>
                     <button className='visit-app-button'>Visit App</button>
                 </div>
                 <div className='landing-page-image-container'>
@@ -20,19 +20,19 @@ const HomePage = () => {
                 </div>
             </div>
             <div className='why-pennydao-container'>
-                <h1>Why PennyDAO?</h1>
+                <h1>PennyDAO Makes Every Penny Count Toward CHANGE</h1>
                 <div className='why-box-container'>
                     <WhyBox
-                    title='Instant Yield Generation'
-                    description='Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+                    title='100%'
+                    description='All impact; Zero platform fees'
                     color='#CEAF7F' />
                     <WhyBox
-                    title='Instant Yield Generation'
-                    description='Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+                    title='1 CAUSE'
+                    description='Student community grants'
                     color='#877C6E' />
                     <WhyBox
-                    title='Instant Yield Generation'
-                    description='Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+                    title='CHANGE'
+                    description='Proof of Impact'
                     color='#A58C6E' />
                 </div>
             </div>

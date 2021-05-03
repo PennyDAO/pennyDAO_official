@@ -1,40 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import Footer from '../components/Footer/Footer';
 import SideNavBar from '../components/SideNavBar/SideNavBar';
+import UserProfile from '../components/UserProfile/UserProfile';
 import WalletButton from '../components/WalletButton/WalletButton'
-import app from '../firebase';
 import { useAuth } from '../hooks/AuthContext';
+import codyImage from '../images/cody.jpeg'
 
 const Dashboard = () => {
 
-    const [role, setRole] = useState('Investor');
-    const [data, setData] = useState({});
-    const { currentUser } = useAuth();
-
+    // const [role, setRole] = useState('Investor');
+    // const [data, setData] = useState({});
+    const { data } = useAuth();
+    const [profileData, setProfileData] = useState({});
     useEffect(() => {
-        const userRef = app.firestore().collection('users');
-        console.log(currentUser.email)
-        userRef.doc(currentUser.email).get()
-        .then(doc => {
-            if (doc.exists) {
-                console.log('Document Data:', doc.data());
-                setData(doc.data());
-            }
-            else
-                console.log('No such document!');
-        })
-        .catch(error => {
-            console.log('Error getting document:', error);
-        })
-    }, [])
+        setProfileData(JSON.parse(data));
+    }, [data])
 
     return(
-        <div style={{paddingLeft: '15%'}}>
+        <div className='dashboardContainer'>
             <SideNavBar />
-            <div style={{display: 'flex', justifyContent: 'flex-end'}}>
+            <div className='dashboardWalletContainer'>
                 <WalletButton></WalletButton>
             </div>
-                Dashboard
+            <UserProfile data={profileData} imgSrc={codyImage}/>
             <Footer />
         </div>
     )

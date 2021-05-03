@@ -5,10 +5,11 @@ import FormInput from '../components/FormInput/FormInput';
 import CircleButton from '../components/CircleButton/CircleButton';
 
 import { useAuth } from '../hooks/AuthContext';
-import { Link, useHistory } from "react-router-dom"
+import { useHistory } from "react-router-dom"
 import NavBar from '../app/NavBar/NavBar';
 import Footer from '../components/Footer/Footer';
 
+import app from '../firebase';
 
 const Login = () => {
 
@@ -17,7 +18,7 @@ const Login = () => {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const history = useHistory();
-    const { login } = useAuth();
+    const { login, setRole, setData } = useAuth();
 
     async function handleSubmit(e) {
         e.preventDefault();
@@ -26,12 +27,28 @@ const Login = () => {
         if (password === '')
             return setError('Password is empty')
         try {
-          setError("");
-          setLoading(true);
-          await login(email, password);
-          history.push("/dashboard");
+            setError("");
+            setLoading(true);
+            await login(email, password);
+            const userRef = app.firestore().collection('users');
+            const username = `${email.substring(0, email.indexOf('@'))}`
+            userRef.doc(username).get()
+            .then(doc => {
+                if (doc.exists) {
+                    console.log('Document Data:', doc.data());
+                    setData(JSON.stringify(doc.data()));
+                    setRole(doc.data().role)
+                    history.push("/dashboard");
+                }
+                else {
+                    console.log('No such document!');
+                }
+            })
+            .catch(error => {
+                console.log('Error getting document:', error);
+            });
         } catch {
-          setError("Failed to login");
+            setError("Failed to login");
         }
     
         setLoading(false);
@@ -47,7 +64,7 @@ const Login = () => {
                 <FormInput title='Email' value={email} setValue={setEmail}/>
                 <FormInput title='Password' value={password} setValue={setPassword}/>   
                 <div style={{display: 'flex', justifyContent: 'flex-end'}}>
-                    <CircleButton disabled={!(email && password)} onClick={e => handleSubmit(e)}/>
+                    <CircleButton disabled={!(email && password) || loading} onClick={e => handleSubmit(e)}/>
                 </div>  
             </WrapperBox>
             <Footer />

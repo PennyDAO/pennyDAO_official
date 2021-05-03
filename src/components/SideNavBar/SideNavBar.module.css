@@ -4,7 +4,7 @@
     max-height: 10vh;
     align-items: center;
     justify-content: space-between;
-    padding: 0;
+    padding: 16px 32px;
 }
 
 .logo {
@@ -112,7 +112,6 @@ input[type="checkbox"]:checked ~ span:nth-of-type(3){
     align-items: center;
     justify-content: center;
     transition: left 0.3s ease-out;
-    justify-content: flex-start;
 }
 
 .mobileNavMenu ul {
@@ -128,21 +127,20 @@ input[type="checkbox"]:checked ~ span:nth-of-type(3){
 }
 
 .mobileNavMenu ul li a {
-    font-size: 2rem;
-    padding: 8px 8px;
+    font-size: 1.5rem;
+    padding: 4px 8px;
     position: relative;
+    margin: auto;
 }
 
-.mobileNavMenu ul li a:nth-child(1) {
-    transition: opacity 0.3s ease-out;
-}
-
-.mobileNavMenu ul li a:nth-child(2) {
-    transition: opacity 0.5s ease-out;
-}
-
-.mobileNavMenu ul li a:nth-child(3) {
-    transition: opacity 0.7s ease-out;
+.mobileNavMenu .navLink {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    padding: 0px 5px;
+    display: block;
 }
 
 .navSegment {
@@ -187,6 +185,7 @@ input[type="checkbox"]:checked ~ span:nth-of-type(3){
 .navButtonContainer {
     width: 100%;
     margin-top: 50px;
+    display: none;
 }
 
 .navButton {
@@ -217,12 +216,12 @@ input[type="checkbox"]:checked ~ span:nth-of-type(3){
         background-color:#FFFAF2; 
         transition: .5s ease; 
         overflow-x: hidden; 
-        padding-top: 20px; 
         display: flex; 
         flex-direction: column; 
         box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
         align-items: center;
         justify-content: flex-start;
+        padding: 20px 0 0 0;
     }
 
     .nav ul {
@@ -255,6 +254,10 @@ input[type="checkbox"]:checked ~ span:nth-of-type(3){
 
     .hamburger {
         display: none;
+    }
+
+    .navButtonContainer {
+        display: block;
     }
 }
 

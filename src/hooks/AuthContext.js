@@ -1,15 +1,28 @@
-import React, { useContext, useState, useEffect } from "react"
-import { auth } from "../firebase.js"
+import React, { useContext, useState, useEffect } from "react";
+import { auth } from "../firebase.js";
 
-const AuthContext = React.createContext()
+const AuthContext = React.createContext();
+const localStorage = require("local-storage");
 
 export function useAuth() {
-  return useContext(AuthContext)
+  return useContext(AuthContext);
 }
 
 export function AuthProvider({ children }) {
-  const [currentUser, setCurrentUser] = useState()
-  const [loading, setLoading] = useState(true)
+  const [currentUser, setCurrentUser] = useState();
+  const [loading, setLoading] = useState(true);
+  const [role, rolesetter] = useState(localStorage.get('role'));
+  const [data, datasetter] = useState(localStorage.get('data'));
+
+  const setRole = (newRole) => {
+    rolesetter(newRole);
+    localStorage.set('role', newRole)
+  }
+
+  const setData = (newData) => {
+    datasetter(newData);
+    localStorage.set('data', newData);
+  }
 
   function signup(email, password) {
     return auth.createUserWithEmailAndPassword(email, password)
@@ -20,6 +33,8 @@ export function AuthProvider({ children }) {
   }
 
   function logout() {
+    setRole('');
+    setData('');
     return auth.signOut()
   }
 
@@ -46,12 +61,16 @@ export function AuthProvider({ children }) {
 
   const value = {
     currentUser,
+    role,
+    data,
     login,
     signup,
     logout,
     resetPassword,
     updateEmail,
-    updatePassword
+    updatePassword,
+    setRole,
+    setData
   }
 
   return (

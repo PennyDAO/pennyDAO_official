@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Link, useHistory } from "react-router-dom"
+import { useHistory } from "react-router-dom"
 import FormInput from '../components/FormInput/FormInput';
+import FormRadioInput from '../components/FormRadioInput/FormRadioInput'
 import ApplicationBox from '../components/ApplicationBox/ApplicationBox';
 import CircleButton from '../components/CircleButton/CircleButton';
 import { useAuth } from '../hooks/AuthContext';
@@ -26,30 +27,38 @@ const StudentApplication = ({location}) => {
     const [password, setPassword] = useState('');
     const [grantAmount, setGrantAmount] = useState('');
     const [youtube, setYoutube] = useState('');
+    const [profileImage, setProfileImage] = useState(null);
+    const [progress, setProgress] = useState(0);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
 
-    const { signup } = useAuth();
+    const { signup, setRole, setData } = useAuth();
     const history = useHistory();
 
     useEffect(() => {
         setEmail(location.state.state.email);
         setPassword(location.state.state.password);
-    }, []);
+    }, [location]);
+
+    const handleChange = e => {
+        if (e.target.files[0]) {
+            const image = e.target.files[0];
+            setProfileImage(image);
+        }
+    };
 
     async function handleSubmit(e) {
-        e.preventDefault()
-    
         // TODO : Error Checking
-        console.log(email);
-        console.log(twitter);
+
         try {
             setError("")
             setLoading(true)
             await signup(email, password)
-
-            const userRef = app.firestore().collection('users');
-            userRef.doc(email).set({
+            
+            const username = `${email.substring(0, email.indexOf('@'))}`;
+            const storage = app.storage();
+            const uploadTask = storage.ref(`images/${username}`).put(profileImage);
+            const data = {
                 firstName,
                 lastName,
                 email,
@@ -61,30 +70,58 @@ const StudentApplication = ({location}) => {
                 twitter,
                 instagram,
                 linkedIn,
+                youtube,
                 other,
                 walletAddress,
                 grantAmount,
+                grantPending: true,
                 role: 'Student'
-            })
-            .then(() => {
-                console.log('Document successfully written');
-            })
-            .catch(error => {
-                console.error('Error writing document: ', error);
-            }) 
-
-            history.push("/dashboard");
+            }
+            uploadTask.on(
+                "state_changed",
+                snapshot => {
+                    const progress = Math.round(
+                    (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                    );
+                    setProgress(progress);
+                },
+                error => {
+                    console.log(error);
+                },
+                () => {
+                    storage
+                    .ref("images")
+                    .child(username)
+                    .getDownloadURL()
+                    .then(imageUrl => {
+                        data.imageUrl = imageUrl;
+                        const userRef = app.firestore().collection('users');
+                        userRef.doc(username).set(data)
+                        .then(() => {
+                            console.log('Document successfully written');
+                            setRole('Student');
+                            setData(JSON.stringify(data));
+                            history.push("/dashboard");
+                        })
+                        .catch(error => {
+                            console.error('Error writing document: ', error);
+                        }) 
+                    });
+                }
+            );
+        
         } catch {
             setError("Failed to create an account")
         }
     
-        setLoading(false)
+        setLoading(false);
     }
 
     return(
         <div>
             <NavBar />
             <h1>Your PennyDAO Application</h1>
+            <h2>{error}</h2>
             <ApplicationBox>
                 <div className='form-input-divider'>
                     <FormInput title='First Name' value={firstName} setValue={setFirstName}/>
@@ -108,9 +145,26 @@ const StudentApplication = ({location}) => {
                     <FormInput title='LinkedIn' value={linkedIn} setValue={setLinkedIn}/>
                     <FormInput title='Other.' value={other} setValue={setOther}/>
                 </div>
-                <FormInput title='Ethereum Wallet Address' value={walletAddress} setValue={setWalletAddress}/>
+                <div className='form-input-divider'>
+                    <FormInput title='Ethereum Wallet Address' value={walletAddress} setValue={setWalletAddress}/>
+                    <FormInput title='Youtube Pitch Link' value={youtube} setValue={setYoutube}/>
+                </div>
+                <div>
+                    <FormRadioInput>
+                        <input type="radio" id="2500" name="grant" value="2500" onChange={e => setGrantAmount(e.target.value)}/>
+                        <label for="male">$2,500</label>
+                        <input type="radio" id="5000" name="grant" value="5000" onChange={e => setGrantAmount(e.target.value)}/>
+                        <label for="female">$5,000</label>
+                        <input type="radio" id="10000" name="grant" value="10000" onChange={e => setGrantAmount(e.target.value)}/>
+                        <label for="other">$10,000</label>
+                    </FormRadioInput>
+                </div>
+                <div>
+                    <label>Profile Photo</label>
+                    <input type="file" onChange={e => handleChange(e)} />
+                </div>
                 <div style={{display: 'flex', justifyContent: 'flex-end', marginTop: '30px'}}>
-                    <CircleButton onClick={e => { handleSubmit(e) }} />
+                    <CircleButton onClick={e => { handleSubmit(e) }} disabled={loading}/>
                 </div>
             </ApplicationBox>
             <Footer />

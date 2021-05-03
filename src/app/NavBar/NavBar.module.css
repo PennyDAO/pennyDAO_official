@@ -9,6 +9,7 @@ nav {
 
 .logo {
     width: 20px;
+    cursor: pointer;
 }
 
 .logo img { 
@@ -143,6 +144,15 @@ input[type="checkbox"]:checked ~ span:nth-of-type(3){
 
 .mobileNavMenu ul li a:nth-child(3) {
     transition: opacity 0.7s ease-out;
+}
+
+.navLink {
+    color: black;
+    text-decoration: none;
+}
+
+.navLink:hover {
+    text-decoration: underline #CEAF7F 3px;
 }
 
 /* Extra small devices (phones, 600px and down) */
