@@ -12,7 +12,7 @@ const HomePage = () => {
             <div className='landing-container'>
                 <div className='title-container'>
                     <h1 className='landing-page-title'>We believe your impact.</h1>
-                    <h2 className='landing-page-subtitle'>A Next Generation CHANGE-maker</h2>
+                    <p className='landing-page-subtitle'>A Next Generation CHANGE-maker</p>
                     <button className='visit-app-button'>Visit App</button>
                 </div>
                 <div className='landing-page-image-container'>

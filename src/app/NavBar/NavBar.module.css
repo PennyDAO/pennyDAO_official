@@ -134,18 +134,6 @@ input[type="checkbox"]:checked ~ span:nth-of-type(3){
     position: relative;
 }
 
-.mobileNavMenu ul li a:nth-child(1) {
-    transition: opacity 0.3s ease-out;
-}
-
-.mobileNavMenu ul li a:nth-child(2) {
-    transition: opacity 0.5s ease-out;
-}
-
-.mobileNavMenu ul li a:nth-child(3) {
-    transition: opacity 0.7s ease-out;
-}
-
 .navLink {
     color: black;
     text-decoration: none;

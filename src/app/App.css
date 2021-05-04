@@ -108,6 +108,68 @@
   justify-content: center;
 }
 
+.studentsContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.studentsForm {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+input[type=text] {
+  background-color: #F7F2EA;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.25);
+  height: 1.5rem;
+}
+
+.searchButton {
+  border: none;
+  border-radius: 5px;
+  background-color: #CEAF7F;
+  padding: 5px 10px;
+  color: white;
+  width: 20%;
+  margin: 20px;
+}
+
+.form-input {
+  background-color: transparent;
+  border: black 2px solid;
+  border-radius: 5px;
+  box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.25);
+  height: 1.5rem;
+}
+
+select {
+  background-color: transparent;
+  border: black 2px solid;
+  border-radius: 5px;
+  box-shadow: 0px 5px 5px rgba(0, 0, 0, 0.25);
+  height: 1.5rem;
+  width: 20%;
+}
+
+.studentsForm div {
+  margin: 0 5%;
+  width: 100%;
+}
+
+.grantStatusContainer {
+  padding: 10px 30px;
+  background-color: #FFFAF2;
+  border-radius: 30px;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  margin: 10% 10%;
+  display: inline-block;
+}
+
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
 
@@ -191,6 +253,18 @@
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+  }
+
+  .form-input {
+    width: 40%;
+  }
+
+  select {
+    width: 10%;
+  }
+
+  .searchButton {
+    width: 10%;
   }
 }
 

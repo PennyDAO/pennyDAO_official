@@ -9,6 +9,24 @@ import app from '../firebase';
 import NavBar from '../app/NavBar/NavBar';
 import Footer from '../components/Footer/Footer';
 
+/**
+ * Checks if the given string is an address
+ *
+ * @method isAddress
+ * @param {String} address the given HEX adress
+ * @return {Boolean}
+*/
+var isAddress = function (address) {
+    if (!/^(0x)?[0-9a-f]{40}$/i.test(address)) {
+        // check if it has the basic requirements of an address
+        return false;
+    } else if (/^(0x)?[0-9a-f]{40}$/.test(address) || /^(0x)?[0-9A-F]{40}$/.test(address)) {
+        // If it's all small caps or all all caps, return true
+        return true;
+    }
+    return false;
+};
+
 const StudentApplication = ({location}) => {
 
     const [firstName, setFirstName] = useState('');
@@ -48,8 +66,34 @@ const StudentApplication = ({location}) => {
     };
 
     async function handleSubmit(e) {
-        // TODO : Error Checking
-
+        e.preventDefault();
+        if (email === '')
+            return setError('Email is empty');
+        if (password === '')
+            return setError('Password is empty');
+        if (firstName === '') 
+            return setError('First Name is empty');
+        if (lastName === '') 
+            return setError('Last Name is empty');
+        if (phone === '') 
+            return setError('Phone Number is empty');
+        if (university === '') 
+            return setError('College/University is empty');
+        if (major === '') 
+            return setError('Major/Field of Study is empty');
+        if (gradYear === '') 
+            return setError('Graduation Year is empty');
+        if (description === '') 
+            return setError('Tell me about yourself is empty');
+        if (walletAddress === '') 
+            return setError('Wallet Address is empty');
+        // if (!isAddress(walletAddress))
+        //     return setError('Wallet Address is invalid');
+        if (youtube === '')
+            return setError
+        if (grantAmount === '')
+            return setError('Select a Grant Amount');
+        
         try {
             setError("")
             setLoading(true)
@@ -121,7 +165,7 @@ const StudentApplication = ({location}) => {
         <div>
             <NavBar />
             <h1>Your PennyDAO Application</h1>
-            <h2>{error}</h2>
+            <h2 style={{color: 'red'}}>{error}</h2>
             <ApplicationBox>
                 <div className='form-input-divider'>
                     <FormInput title='First Name' value={firstName} setValue={setFirstName}/>

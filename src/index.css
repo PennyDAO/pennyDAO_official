@@ -1,19 +1,59 @@
 @import url('https://fonts.googleapis.com/css2?family=Righteous&display=swap');
 
+@font-face {
+  font-display: swap;
+  unicode-range: U+000-5FF;
+  font-family: Suisse-Regular;
+  src: url("./fonts/SuisseIntl-Regular-WebS.woff2") format("woff2"),url("./fonts/SuisseIntl-Regular-WebM.woff2") format("woff");
+  font-weight: 400;
+  font-style: normal; 
+}
+
+@font-face {
+  font-display: swap;
+  unicode-range: U+000-5FF;
+  font-family: Suisse-Light;
+  src: url("./fonts/SuisseIntl-Light-WebS.woff2") format("woff2"),url("./fonts/SuisseIntl-Light-WebM.woff2") format("woff");
+  font-weight: 100;
+  font-style: normal; 
+}
+
+@font-face {
+  font-display: swap;
+  unicode-range: U+000-5FF;
+  font-family: Circular-Bold;
+  src: url("./fonts/CircularXXSub-BoldSubset.woff2") format("woff2"),url("./fonts/CircularXXSub-BoldSubset.woff") format("woff");
+  font-weight: 400;
+  font-style: normal; 
+}
+
+@font-face {
+  font-display: swap;
+  unicode-range: U+000-5FF;
+  font-family: Circular-Book;
+  src: url("./fonts/CircularXXSub-BookSubset.woff2") format("woff2"),url("./fonts/CircularXXSub-BookSubset.woff") format("woff");
+  font-weight: 400;
+  font-style: normal; 
+}
+
 body {
   margin: 0;
   font-family: 'Righteous';
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  font-family: 'Suisse-Regular';
+}
+
+* {
+  font-family: Circular-Book;
+}
+
+h1, h2, h3, h4 {
   font-family: 'Righteous';
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
-}
-
-* {
-  font-family: 'Righteous';
 }
