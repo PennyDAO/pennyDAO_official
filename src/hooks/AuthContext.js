@@ -13,6 +13,7 @@ export function AuthProvider({ children }) {
   const [loading, setLoading] = useState(true);
   const [role, rolesetter] = useState(localStorage.get('role'));
   const [data, datasetter] = useState(localStorage.get('data'));
+  const [address, addresssetter] = useState(localStorage.get('address'));
 
   const setRole = (newRole) => {
     rolesetter(newRole);
@@ -22,6 +23,11 @@ export function AuthProvider({ children }) {
   const setData = (newData) => {
     datasetter(newData);
     localStorage.set('data', newData);
+  }
+
+  const setAddress = (newAddress) => {
+    addresssetter(newAddress);
+    localStorage.set('address', newAddress);
   }
 
   function signup(email, password) {
@@ -63,6 +69,7 @@ export function AuthProvider({ children }) {
     currentUser,
     role,
     data,
+    address,
     login,
     signup,
     logout,
@@ -70,7 +77,8 @@ export function AuthProvider({ children }) {
     updateEmail,
     updatePassword,
     setRole,
-    setData
+    setData,
+    setAddress
   }
 
   return (

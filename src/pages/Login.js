@@ -6,7 +6,6 @@ import CircleButton from '../components/CircleButton/CircleButton';
 
 import { useAuth } from '../hooks/AuthContext';
 import { useHistory } from "react-router-dom"
-import NavBar from '../app/NavBar/NavBar';
 import Footer from '../components/Footer/Footer';
 
 import app from '../firebase';
@@ -38,7 +37,10 @@ const Login = () => {
                     console.log('Document Data:', doc.data());
                     setData(JSON.stringify(doc.data()));
                     setRole(doc.data().role)
-                    history.push("/dashboard");
+                    if (email === 'pennydao_admin@eth.com')
+                        history.push('/admin-dashboard');
+                    else 
+                        history.push("/dashboard");
                 }
                 else {
                     console.log('No such document!');
@@ -55,8 +57,7 @@ const Login = () => {
     }
 
     return(
-        <div>
-            <NavBar />
+        <div className='dashboardContainer'>
             <h1>Welcome back to PennyDAO!</h1>
             <WrapperBox>
                 <h1>Login</h1> 

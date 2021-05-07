@@ -10,8 +10,6 @@ import Footer from '../components/Footer/Footer';
 import Web3 from 'web3';
 import ApplicationsContract from '../artifacts/Applications.json';
 
-// const BigNumber = require('bignumber.js');
-
 /**
  * Checks if the given string is an address
  *
@@ -27,10 +25,10 @@ import ApplicationsContract from '../artifacts/Applications.json';
 //         // If it's all small caps or all all caps, return true
 //         return true;
 //     }
-//     return false;
+//     return true;
 // };
 
-const StudentApplication = ({location}) => {
+const EditStudentApplication = () => {
 
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
@@ -45,21 +43,58 @@ const StudentApplication = ({location}) => {
     const [linkedIn, setLinkedIn] = useState('');
     const [other, setOther] = useState('');
     const [walletAddress, setWalletAddress] = useState('');
-    const [password, setPassword] = useState('');
     const [grantAmount, setGrantAmount] = useState('');
     const [youtube, setYoutube] = useState('');
     const [profileImage, setProfileImage] = useState(null);
+    const [imageUrl, setImageUrl] = useState('');
     const [progress, setProgress] = useState(0);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const [profileData, setProfileData] = useState({});
+    const [applicationID, setApplicationID] = useState(0);
 
-    const { signup, setRole, setData, address } = useAuth();
+    const { setRole, setData, currentUser, data, address } = useAuth();
     const history = useHistory();
 
     useEffect(() => {
-        setEmail(location.state.state.email);
-        setPassword(location.state.state.password);
-    }, [location]);
+        console.log(data);
+        const x = JSON.parse(data);
+        console.log(x);
+        if (x === {}) {
+            const username = `${currentUser.email.substring(0, currentUser.email.indexOf('@'))}`;
+            const userRef = app.firestore().collection('users');
+            userRef.doc(username).get()
+            .then(doc => {
+                if (doc.exists) {
+                    setProfileData(doc.data());
+                }
+                else
+                    console.log('No such document!');
+            })
+            .catch(error => {
+                console.log('Error getting document:', error);
+            })
+        }
+        else {
+            setProfileData(x);
+        }
+        setEmail(x.email);
+        setFirstName(x.firstName);
+        setLastName(x.lastName);
+        setPhone(x.phone);
+        setUniversity(x.university);
+        setMajor(x.major);
+        setGradYear(x.gradYear);
+        setDescription(x.description);
+        setTwitter(x.twitter);
+        setInstagram(x.instagram);
+        setLinkedIn(x.linkedIn);
+        setOther(x.other);
+        setWalletAddress(x.walletAddress);
+        setYoutube(x.youtube);
+        setGrantAmount(x.grantAmount);
+        setImageUrl(x.imageUrl)
+    }, [currentUser, data]);
 
     const handleChange = e => {
         if (e.target.files[0]) {
@@ -72,8 +107,6 @@ const StudentApplication = ({location}) => {
         e.preventDefault();
         if (email === '')
             return setError('Email is empty');
-        if (password === '')
-            return setError('Password is empty');
         if (firstName === '') 
             return setError('First Name is empty');
         if (lastName === '') 
@@ -99,7 +132,6 @@ const StudentApplication = ({location}) => {
         try {
             setError("")
             setLoading(true)
-            await signup(email, password)
             const data = {
                 firstName,
                 lastName,
@@ -140,6 +172,12 @@ const StudentApplication = ({location}) => {
                     .child(username)
                     .getDownloadURL()
                     .then(imageUrl => {
+                        // if (imageUrl) {
+                        //     console.log('Document successfully written');
+                        //     setRole('Student');
+                        //     setData(JSON.stringify(data));
+                        //     return
+                        // }
                         data.imageUrl = imageUrl;
                         const userRef = app.firestore().collection('users');
                         userRef.doc(username).set(data)
@@ -147,7 +185,6 @@ const StudentApplication = ({location}) => {
                             console.log('Document successfully written');
                             setRole('Student');
                             setData(JSON.stringify(data));
-                            history.push("/dashboard");
                         })
                         .catch(error => {
                             console.error('Error writing document: ', error);
@@ -159,31 +196,32 @@ const StudentApplication = ({location}) => {
         } catch {
             setError("Failed to create an account")
         }    
-        // We Initialize our application here
-        // TODO: FIX THE BIG NUMBER IDK WHY THIS ISNT WORKING!!
-        // const amount = new BigNumber(data.grantAmount * Math.pow(10, 18));
-        // console.log(amount);
-        // const newAmount = Web3.utils.toBN(amount);
-        // console.log(newAmount);
 
-        const dataParams = ['0xdc31ee1784292379fbb2964b3b9c4124d8f89c60', address, 100000, ''];
-
+        // We Update our application here
+        // first we need our application ID
         if (window.ethereum) {
             await window.ethereum.send('eth_requestAccounts');
-            window.web3 = new Web3(window.ethereum);
             const web3 = new Web3(window.ethereum);
+            const contractOne = new web3.eth.Contract(ApplicationsContract.abi, '0xDec8C0e31A66ed2eEf7ed54155647c9abcf49b9F');
+            contractOne.methods.tokenOfOwnerByIndex(address, 0).call()
+            .then(d => setApplicationID(d));
+
+            const dataParams = ['0xdc31ee1784292379fbb2964b3b9c4124d8f89c60', address, 10000, ''];
+            window.web3 = new Web3(window.ethereum);
             const contract = new web3.eth.Contract(ApplicationsContract.abi, '0xDec8C0e31A66ed2eEf7ed54155647c9abcf49b9F');
-            contract.methods.createApplication(dataParams).send({
+            contract.methods.updateApplication(applicationID, dataParams).send({
                 from: address
             })
-            .then(console.log);
+            .then(history.push("/dashboard"));
         }
+
         setLoading(false);
+
     }
 
     return(
         <div className='dashboardContainer'>
-            <h1>Your PennyDAO Application</h1>
+            <h1>Edit Your PennyDAO Application</h1>
             <h2 style={{color: 'red'}}>{error}</h2>
             <ApplicationBox>
                 <div className='form-input-divider'>
@@ -214,11 +252,11 @@ const StudentApplication = ({location}) => {
                 </div>
                 <div>
                     <FormRadioInput>
-                        <input type="radio" id="2500" name="grant" value="2500" onChange={e => setGrantAmount(e.target.value)}/>
+                        <input type="radio" id="2500" name="grant" value="2500" onChange={e => setGrantAmount(e.target.value)} checked={grantAmount === '2500'}/>
                         <label htmlFor="male">$2,500</label>
-                        <input type="radio" id="5000" name="grant" value="5000" onChange={e => setGrantAmount(e.target.value)}/>
+                        <input type="radio" id="5000" name="grant" value="5000" onChange={e => setGrantAmount(e.target.value)} checked={grantAmount === '5000'}/>
                         <label htmlFor="female">$5,000</label>
-                        <input type="radio" id="10000" name="grant" value="10000" onChange={e => setGrantAmount(e.target.value)}/>
+                        <input type="radio" id="10000" name="grant" value="10000" onChange={e => setGrantAmount(e.target.value)} checked={grantAmount === '10000'}/>
                         <label htmlFor="other">$10,000</label>
                     </FormRadioInput>
                 </div>
@@ -235,4 +273,4 @@ const StudentApplication = ({location}) => {
     )
 }
 
-export default StudentApplication;
+export default EditStudentApplication;

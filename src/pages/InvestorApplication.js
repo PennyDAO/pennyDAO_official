@@ -5,7 +5,6 @@ import ApplicationBox from '../components/ApplicationBox/ApplicationBox';
 import CircleButton from '../components/CircleButton/CircleButton';
 import { useAuth } from '../hooks/AuthContext';
 import app from '../firebase';
-import NavBar from '../app/NavBar/NavBar';
 import Footer from '../components/Footer/Footer';
 
 const InvestorApplication = ({location}) => {
@@ -75,7 +74,8 @@ const InvestorApplication = ({location}) => {
                 walletAddress,
                 grantAmount,
                 grantPending: false,
-                role: 'Investor'
+                role: 'Investor',
+                applicationApproved: false
             }
             uploadTask.on(
                 "state_changed",
@@ -118,8 +118,7 @@ const InvestorApplication = ({location}) => {
     }
 
     return(
-        <div>
-            <NavBar />
+        <div className='dashboardContainer'>
             <h1>Your PennyDAO Application</h1>
             <h2>{error}</h2>
             <ApplicationBox>

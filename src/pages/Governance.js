@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import ProposalBox from '../components/ProposalBox/ProposalBox';
 import SideNavBar from '../components/SideNavBar/SideNavBar';
 import WalletButton from '../components/WalletButton/WalletButton';
 import { useAuth } from '../hooks/AuthContext';
@@ -14,11 +15,16 @@ const Governance = () => {
 
     return (
         <div className='dashboardContainer'>
-            <SideNavBar />
-            <div className='dashboardWalletContainer'>
-                <WalletButton></WalletButton>
+            <h1>Governance</h1>
+            <div>
+                <button>All</button>
+                <button>Active</button>
+                <button>Pending</button>
+                <button>Closed</button>
             </div>
-            Governance
+            <div>
+                {/* <ProposalBox title={} to={} status={}/> */}
+            </div>
         </div>
     )
 }

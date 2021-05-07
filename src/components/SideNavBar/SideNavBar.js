@@ -7,6 +7,7 @@ import { ReactComponent as ProfileLogo } from '../../images/profile.svg'
 import { ReactComponent as StudentsLogo } from '../../images/students.svg'
 import { ReactComponent as GrantStatusLogo } from '../../images/grant-status.svg'
 import { ReactComponent as LogoutLogo } from '../../images/logout.svg'
+import { ReactComponent as DepositLogo } from '../../images/deposit.svg';
 
 const PennyDAOLogo = ({onClick, alt}) => {
     return(
@@ -35,14 +36,14 @@ const NavSegment = ({children, to, title}) => {
 const LogoutSegment = ({children, onClick, title}) => {
     return (
         <div className={styles.navSegment} onClick={onClick}>         
-            <a 
+            <span 
                 className={styles.navLink}
                 activeClassName={styles.navLinkActive}>
                 <div className={styles.navSegmentImage}>
                    {children}
                 </div>
                 <span>{title}</span>
-            </a>
+            </span>
         </div>
     )
 }
@@ -50,7 +51,7 @@ const LogoutSegment = ({children, onClick, title}) => {
 const Hambuger = ({onClick}) => {
     return(
         <div className={styles.hamburger}>
-            <label for="check" className={styles.label}>
+            <label htmlFor="check" className={styles.label}>
                 <input type="checkbox" id="check" onClick={onClick}/> 
                 <span></span>
                 <span></span>
@@ -69,9 +70,9 @@ const MobileNavMenu = ({isOpen, onClick}) => {
         <div className={styles.mobileNavMenu} style={{left: isOpen ? 0 : '-100vw'}}>
             <ul>
                 <li>
-                    <a className={styles.navLink}  style={{ transition: 'opacity 1.2s ease-out, bottom 0.3s ease-out', opacity: isOpen ? 1 : 0, bottom: isOpen ? 0 : '-100px' }} onClick={onClick}>
+                    <span className={styles.navLink}  style={{ transition: 'opacity 1.2s ease-out, bottom 0.3s ease-out', opacity: isOpen ? 1 : 0, bottom: isOpen ? 0 : '-100px' }} onClick={onClick}>
                         Light Paper
-                    </a>
+                    </span>
                 </li>
                 {
                 !currentUser && 
@@ -142,13 +143,25 @@ const SideNavBar = () => {
             <PennyDAOLogo onClick={() => history.push('/')} alt='PennyDAO logo'/>
             <div className={styles.navButtonContainer}>
                 {
-                currentUser && 
+                    !currentUser && 
+                    <NavSegment to='/login' title='Login'>
+                        <ProfileLogo/>
+                    </NavSegment>
+                }
+                {
+                    !currentUser && 
+                    <NavSegment to='/register' title='Register'>
+                        <ProfileLogo/>
+                    </NavSegment>
+                }
+                {
+                currentUser && (role === 'Student' || role === 'Investor') &&
                 <NavSegment to='/dashboard' title='Profile'>
                     <ProfileLogo/>
                 </NavSegment>
                 }
                 {
-                currentUser && 
+                currentUser && (role === 'Student' || role === 'Investor') && 
                 <NavSegment to='/students' title='Students'>
                     <StudentsLogo/>
                 </NavSegment>
@@ -166,8 +179,20 @@ const SideNavBar = () => {
                 </NavSegment>
                 }
                 {
+                currentUser && role === 'Investor' &&
+                <NavSegment to='/deposit' title='Deposit'>
+                    <DepositLogo/>
+                </NavSegment>
+                }
+                {
+                currentUser && role === 'Admin' &&
+                <NavSegment to='/admin-dashboard' title='Admin Dashboard'>
+                    <DepositLogo/>
+                </NavSegment>
+                }
+                {
                 currentUser && 
-                <LogoutSegment onClick={() => {logout(); history.push('/')}} title='Logout'>
+                <LogoutSegment onClick={() => {logout(); history.push('/');}} title='Logout'>
                     <LogoutLogo/>
                 </LogoutSegment>
                 }

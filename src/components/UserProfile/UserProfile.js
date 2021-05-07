@@ -13,11 +13,11 @@ const InfoBox = ({title, subTitle}) => {
 }
 
 const UserProfile = ({data}) => {
+
     return (
         <div className={styles.container}>
-            {console.log(data)}
             <div className={styles.imgContainer}>
-                <img src={data.imageUrl} className={styles.img} alt={`${data.firstName} ${data.lastName} profile picture`}/>
+                <img src={data.imageUrl} className={styles.img} alt={`${data.firstName} ${data.lastName} profile`}/>
                 {data.role === 'Student' && <p className={data.grantPending ? styles.grantStatus : styles.grantStatusActive}>{data.grantPending ? 'Grant Pending' : 'Grant Approved!'}</p>}
             </div>
             <div className={styles.infoContainer}>
@@ -27,29 +27,34 @@ const UserProfile = ({data}) => {
                 </div>
                 <div style={{width: '100%', borderBottom: '1px solid black', height: '10px'}}></div>
                 <div className={styles.textContainer}>
-                    <InfoBox 
+                    { data.role === 'Student' && <InfoBox 
                         title='Major/Area of Focus' 
-                        subTitle={data.major}/>
-                    <InfoBox 
+                        subTitle={data.major}/>}
+                    { data.role === 'Student' && <InfoBox 
                         title='Orginizations' 
-                        subTitle={data.major}/>
+                        subTitle={data.major}/>}
                     <div style={{width: '100%'}}>
                         <InfoBox 
                             title='About Me' 
                             subTitle={data.description}/>
                     </div>
-                    <InfoBox 
+                    { data.role === 'Student' && <InfoBox 
                             title='Pitch Video' 
-                            subTitle={data.youtube}/>
+                            subTitle={data.youtube}/>}
+                    { data.role === 'Admin' && 
+                        <div>
+                            hello
+                        </div>
+                    }
                 </div>
                 <div className={styles.socialsContainer}>
-                    <a className={styles.socialButton} href={data.twitter} target="_blank">
+                    <a className={styles.socialButton} href={data.twitter} target="_blank" rel="noreferrer">
                         <FontAwesomeIcon icon={faTwitter} size='2x'/>
                     </a>
-                    <a className={styles.socialButton} href={data.instagram} target="_blank">
+                    <a className={styles.socialButton} href={data.instagram} target="_blank" rel="noreferrer">
                         <FontAwesomeIcon icon={faInstagram} size='2x'/>
                     </a>
-                    <a className={styles.socialButton} href={data.linkedIn} target="_blank">
+                    <a className={styles.socialButton} href={data.linkedIn} target="_blank" rel="noreferrer">
                         <FontAwesomeIcon icon={faLinkedin} size='2x'/>
                     </a>
                 </div>

@@ -8,7 +8,6 @@ import Modal from 'react-modal';
 import { useHistory } from "react-router-dom"
 
 import CircleButton from '../components/CircleButton/CircleButton';
-import NavBar from '../app/NavBar/NavBar';
 import Footer from '../components/Footer/Footer';
 
 const customStyles = {
@@ -48,8 +47,7 @@ const Register = () => {
     }
 
     return(
-        <div>
-            <NavBar />
+        <div className='dashboardContainer'>
             <h1>New to PennyDAO?</h1>
             <WrapperBox>
                 <form>
@@ -85,6 +83,7 @@ const Register = () => {
                         onRequestClose={closeModal}
                         contentLabel="Example Modal"
                         style={customStyles}
+                        ariaHideApp={false}
                     >
                         <button onClick={closeModal}>x</button>
                         <h1>Are you a...</h1>

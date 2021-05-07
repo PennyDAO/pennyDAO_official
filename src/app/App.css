@@ -166,8 +166,94 @@ select {
   background-color: #FFFAF2;
   border-radius: 30px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  margin: 10% 10%;
+  margin: 0 10%;
   display: inline-block;
+}
+
+.recieveButton {
+  text-decoration: none;
+  color: white;
+  background-color: #CEAF7F;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 0.75rem;
+}
+
+.depositInputContainer {
+  margin-bottom: 20px;
+}
+
+.depositInput {
+  padding: 5px 10px;
+  background-color: #FFFAF2;
+  border-radius: 5px;
+  border: #CEAF7F 2px solid;
+  margin-bottom: 20px;
+}
+
+.depositInputButton {
+  text-decoration: none;
+  color: white;
+  background-color: #CEAF7F;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 0.75rem;
+  border: #CEAF7F 3px solid;
+  margin: 10px;
+}
+
+.depositInput[disabled] {
+  padding: 5px 10px;
+  background-color: #636261;
+  border-radius: 5px 0 0 5px;
+  border: #636261 2px solid;
+  color: white;
+}
+
+.depositInputButton[disabled] {
+  text-decoration: none;
+  color: white;
+  background-color: #636261;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 0.75rem;
+  border: #636261 3px solid;
+}
+
+.percentButton {
+  padding: 5px 10px;
+  background-color: #CEAF7F;
+  border-radius: 5px;
+  bordeR: none;
+  margin: 0 10px;
+  color: white;
+}
+
+.approveButton {
+  text-decoration: none;
+  color: white;
+  background-color: #CEAF7F;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 0.75rem;
+  border: #CEAF7F 3px solid;
+  margin-bottom: 20px;
+  margin: 10px;
+}
+
+.navLinkContainer {
+  margin: 20px;
+}
+
+.editApplicationButton {
+  text-decoration: none;
+  color: white;
+  background-color: #CEAF7F;
+  border-radius: 5px;
+  padding: 5px 10px;
+  font-size: 0.75rem;
+  border: #CEAF7F 3px solid;
+  margin: 10px;
 }
 
 /* Extra small devices (phones, 600px and down) */

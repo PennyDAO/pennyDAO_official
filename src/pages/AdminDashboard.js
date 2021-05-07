@@ -4,7 +4,7 @@ import { useAuth } from '../hooks/AuthContext';
 import app from '../firebase';
 import UserBox from '../components/UserBox/UserBox';
 
-const Students = () => {
+const AdminDashboard = () => {
 
     const { currentUser } = useAuth();
     const [studentList, setStudentList] = useState([]);
@@ -12,6 +12,7 @@ const Students = () => {
     const [query, setQuery] = useState('');
 
     useEffect(() => {
+
         const firestore = app.firestore();
         const userRef = firestore.collection('users');
         const userListRef = userRef.where("role", "==", "Student");
@@ -28,6 +29,29 @@ const Students = () => {
             console.log('Error getting document:', error);
         });
     }, [currentUser])
+
+    const approveApplication = (email) => {
+        console.log(email)
+        const userRef = app.firestore().collection('users');
+        const username = `${email.substring(0, email.indexOf('@'))}`
+        userRef.doc(username).get()
+        .then(doc => {
+            if (doc.exists) {
+                let x = doc.data();
+                console.log(x);
+                x.applicationApproved = true;
+                userRef.doc(username).set(x)
+                .then(console.log)
+                .catch(console.log)
+            }
+            else {
+                console.log('No such document!');
+            }
+        })
+        .catch(error => {
+            console.log('Error getting document:', error);
+        });
+    }
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -56,7 +80,7 @@ const Students = () => {
 
     return (
         <div className='dashboardContainer'>
-            <h1>PennyDAO Students</h1>
+            <h1>Current Applications</h1>
             <form onSubmit={e => handleSubmit(e)} className='studentsForm'>
                 <div>
                     <select className='dropdown' value={category} onChange={(e) => setCategory(e.target.value)}>
@@ -77,7 +101,7 @@ const Students = () => {
             <div className='studentsContainer'>
                 {studentList.map(student => {
                     return(
-                        <UserBox data={student}/>
+                        <UserBox data={student} onClick={() => approveApplication(student.email)}/>
                     )
                 })}
             </div>
@@ -86,4 +110,4 @@ const Students = () => {
     )
 }
 
-export default Students;
+export default AdminDashboard;
