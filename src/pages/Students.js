@@ -13,10 +13,9 @@ const Students = () => {
 
     useEffect(() => {
         const firestore = app.firestore();
-        const userRef = firestore.collection('users');
-        const userListRef = userRef.where("role", "==", "Student");
+        const studentRef = firestore.collection('students');
         let tempList = []
-        userListRef.get()
+        studentRef.get()
         .then(querySnapshot => {
             querySnapshot.forEach((doc) => {
                 if (doc.data().email !== currentUser.email)
@@ -27,18 +26,13 @@ const Students = () => {
         .catch(error => {
             console.log('Error getting document:', error);
         });
-    }, [currentUser])
+    }, [currentUser]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(category, query)
         const firestore = app.firestore();
-        const userRef = firestore.collection('users');
-        let userListRef;
-        if (category !== '' && query !== '')
-            userListRef = userRef.where("role", "==", "Student").where(category, "==", query);
-        else 
-            userListRef = userRef.where("role", "==", "Student");
+        const studentRef = firestore.collection('students');
+        const userListRef = (category !== '' && query !== '') ? studentRef.where(category, "==", query) : studentRef;
 
         let tempList = []
         userListRef.get()
@@ -77,7 +71,7 @@ const Students = () => {
             <div className='studentsContainer'>
                 {studentList.map(student => {
                     return(
-                        <UserBox data={student}/>
+                        <UserBox data={student} key={student.email}/>
                     )
                 })}
             </div>

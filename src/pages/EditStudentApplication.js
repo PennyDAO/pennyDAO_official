@@ -9,6 +9,7 @@ import app from '../firebase';
 import Footer from '../components/Footer/Footer';
 import Web3 from 'web3';
 import ApplicationsContract from '../artifacts/Applications.json';
+import { DAI_TOKEN_CONTRACT, PENNY_APPLICATION } from '../utils.js';
 
 /**
  * Checks if the given string is an address
@@ -51,15 +52,12 @@ const EditStudentApplication = () => {
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
     const [profileData, setProfileData] = useState({});
-    const [applicationID, setApplicationID] = useState(0);
 
     const { setRole, setData, currentUser, data, address } = useAuth();
     const history = useHistory();
 
     useEffect(() => {
-        console.log(data);
         const x = JSON.parse(data);
-        console.log(x);
         if (x === {}) {
             const username = `${currentUser.email.substring(0, currentUser.email.indexOf('@'))}`;
             const userRef = app.firestore().collection('users');
@@ -94,6 +92,7 @@ const EditStudentApplication = () => {
         setYoutube(x.youtube);
         setGrantAmount(x.grantAmount);
         setImageUrl(x.imageUrl)
+        console.log(x.imageUrl);
     }, [currentUser, data]);
 
     const handleChange = e => {
@@ -129,94 +128,74 @@ const EditStudentApplication = () => {
             return setError
         if (grantAmount === '')
             return setError('Select a Grant Amount');
+        setError("")
+        setLoading(true)
         try {
-            setError("")
-            setLoading(true)
-            const data = {
-                firstName,
-                lastName,
-                email,
-                phone,
-                university,
-                major,
-                gradYear,
-                description,
-                twitter,
-                instagram,
-                linkedIn,
-                youtube,
-                other,
-                walletAddress,
-                grantAmount,
-                grantPending: true,
-                role: 'Student',
-                applicationApproved: false
-            }
+            // store basic information in user table
             const username = `${email.substring(0, email.indexOf('@'))}`;
+            const role = 'Student';
+            const firestore = app.firestore();
             const storage = app.storage();
+
+            // add profile image url to firebase storage
             const uploadTask = storage.ref(`images/${username}`).put(profileImage);
             uploadTask.on(
                 "state_changed",
-                snapshot => {
-                    const progress = Math.round(
-                    (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-                    );
-                    setProgress(progress);
-                },
-                error => {
-                    console.log(error);
-                },
                 () => {
                     storage
                     .ref("images")
                     .child(username)
                     .getDownloadURL()
-                    .then(imageUrl => {
-                        // if (imageUrl) {
-                        //     console.log('Document successfully written');
-                        //     setRole('Student');
-                        //     setData(JSON.stringify(data));
-                        //     return
-                        // }
-                        data.imageUrl = imageUrl;
-                        const userRef = app.firestore().collection('users');
-                        userRef.doc(username).set(data)
+                    .then(url => {
+                        setImageUrl(url);
+                        // store student information in student table
+                        const studentRef = firestore.collection('students');
+                        const newProfileData = {
+                            firstName,
+                            lastName,
+                            email,
+                            phone,
+                            university,
+                            major,
+                            gradYear,
+                            description,
+                            twitter,
+                            instagram,
+                            linkedIn,
+                            youtube,
+                            other,
+                            walletAddress,
+                            grantAmount,
+                            imageUrl: url,
+                            applicationID: -1,
+                            applicationStatus: 'Created',
+                            applicationSubmitted: false,
+                        }
+                        studentRef.doc(username).set(newProfileData)
                         .then(() => {
-                            console.log('Document successfully written');
-                            setRole('Student');
-                            setData(JSON.stringify(data));
-                        })
-                        .catch(error => {
-                            console.error('Error writing document: ', error);
-                        }) 
+                            console.log('Student Information Subbmitted!')
+                            if (window.ethereum) {
+                                window.ethereum.send('eth_requestAccounts');
+                                const web3 = new Web3(window.ethereum);
+                                const contract = new web3.eth.Contract(ApplicationsContract.abi, PENNY_APPLICATION);
+                                contract.methods.tokenOfOwnerByIndex(address, 0).call()
+                                .then(applicationID => {
+                                    contract.methods.updateApplication(applicationID, [DAI_TOKEN_CONTRACT, address, parseInt(grantAmount), '']).send({
+                                        from: address
+                                    })
+                                    .then(history.push("/dashboard"));
+                                });
+                            }
+                            setData(JSON.stringify(newProfileData));
+                            history.push('/dashboard');
+                        });
                     });
                 }
             );
-        
         } catch {
             setError("Failed to create an account")
         }    
-
-        // We Update our application here
-        // first we need our application ID
-        if (window.ethereum) {
-            await window.ethereum.send('eth_requestAccounts');
-            const web3 = new Web3(window.ethereum);
-            const contractOne = new web3.eth.Contract(ApplicationsContract.abi, '0xDec8C0e31A66ed2eEf7ed54155647c9abcf49b9F');
-            contractOne.methods.tokenOfOwnerByIndex(address, 0).call()
-            .then(d => setApplicationID(d));
-
-            const dataParams = ['0xdc31ee1784292379fbb2964b3b9c4124d8f89c60', address, 10000, ''];
-            window.web3 = new Web3(window.ethereum);
-            const contract = new web3.eth.Contract(ApplicationsContract.abi, '0xDec8C0e31A66ed2eEf7ed54155647c9abcf49b9F');
-            contract.methods.updateApplication(applicationID, dataParams).send({
-                from: address
-            })
-            .then(history.push("/dashboard"));
-        }
-
         setLoading(false);
-
     }
 
     return(

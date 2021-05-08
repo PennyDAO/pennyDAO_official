@@ -29,18 +29,34 @@ const Login = () => {
             setError("");
             setLoading(true);
             await login(email, password);
+            // query user based off email
             const userRef = app.firestore().collection('users');
-            const username = `${email.substring(0, email.indexOf('@'))}`
-            userRef.doc(username).get()
+            userRef.doc(email).get()
             .then(doc => {
                 if (doc.exists) {
-                    console.log('Document Data:', doc.data());
-                    setData(JSON.stringify(doc.data()));
-                    setRole(doc.data().role)
-                    if (email === 'pennydao_admin@eth.com')
+                    // check their role: set data accordingly
+                    const data = doc.data();
+                    setRole(data.role)
+                    if (data.role === 'Student') {
+                        const studentRef = app.firestore().collection('students');
+                        studentRef.doc(data.username).get()
+                        .then(res => {
+                            setData(JSON.stringify(res.data()));
+                            history.push("/dashboard");
+                        })
+                    }
+                    else if (data.role === 'Investor') {
+                        const investorRef = app.firestore().collection('investors');
+                        investorRef.doc(data.username).get()
+                        .then(res => {
+                            setData(JSON.stringify(res.data()));
+                            history.push("/dashboard");
+                        });
+                    }
+                    else if (data.role === 'Admin') {
+                        setData(JSON.stringify(data));
                         history.push('/admin-dashboard');
-                    else 
-                        history.push("/dashboard");
+                    }
                 }
                 else {
                     console.log('No such document!');

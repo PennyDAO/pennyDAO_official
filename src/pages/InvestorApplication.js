@@ -21,11 +21,10 @@ const InvestorApplication = ({location}) => {
     const [instagram, setInstagram] = useState('');
     const [linkedIn, setLinkedIn] = useState('');
     const [other, setOther] = useState('');
-    const [walletAddress, setWalletAddress] = useState('');
+    const [imageUrl, setImageUrl] = useState('');
     const [password, setPassword] = useState('');
-    const [grantAmount, setGrantAmount] = useState('0');
-    const [youtube, setYoutube] = useState('');
     const [profileImage, setProfileImage] = useState(null);
+    const [previewImage, setPreviewImage] = useState();
     const [progress, setProgress] = useState(0);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
@@ -43,83 +42,76 @@ const InvestorApplication = ({location}) => {
         if (e.target.files[0]) {
             const image = e.target.files[0];
             setProfileImage(image);
+            setPreviewImage(URL.createObjectURL(e.target.files[0]));
         }
     };
 
     async function handleSubmit(e) {
         // TODO : Error Checking
-
         try {
-            setError("")
-            setLoading(true)
-            await signup(email, password)
-            
+
+            // store basic information in user table
             const username = `${email.substring(0, email.indexOf('@'))}`;
+            const role = 'Investor';
+            const firestore = app.firestore();
             const storage = app.storage();
+
+            const userRef = firestore.collection('users');
+            userRef.doc(email).set({
+                username,
+                role,
+                email
+            });
+
+            // add profile image url to firebase storage
             const uploadTask = storage.ref(`images/${username}`).put(profileImage);
-            const data = {
-                firstName,
-                lastName,
-                email,
-                phone,
-                university,
-                major,
-                gradYear,
-                description,
-                twitter,
-                instagram,
-                linkedIn,
-                youtube,
-                other,
-                walletAddress,
-                grantAmount,
-                grantPending: false,
-                role: 'Investor',
-                applicationApproved: false
-            }
             uploadTask.on(
                 "state_changed",
-                snapshot => {
-                    const progress = Math.round(
-                    (snapshot.bytesTransferred / snapshot.totalBytes) * 100
-                    );
-                    setProgress(progress);
-                },
-                error => {
-                    console.log(error);
-                },
                 () => {
                     storage
                     .ref("images")
                     .child(username)
                     .getDownloadURL()
-                    .then(imageUrl => {
-                        data.imageUrl = imageUrl;
-                        const userRef = app.firestore().collection('users');
-                        userRef.doc(username).set(data)
+                    .then(url => {
+                        setImageUrl(url);
+                        // store investor information in investor table
+                        const investorRef = firestore.collection('investors');
+                        const profileData = {
+                            firstName,
+                            lastName,
+                            email,
+                            phone,
+                            university,
+                            major,
+                            gradYear,
+                            description,
+                            twitter,
+                            instagram,
+                            linkedIn,
+                            other,
+                            imageUrl: url,
+                            contribute: []
+                        }
+                        investorRef.doc(username).set(profileData)
                         .then(() => {
-                            console.log('Document successfully written');
+                            console.log('Investor Information Subbmitted!')
+                            setData(JSON.stringify(profileData));
                             setRole('Investor');
-                            setData(JSON.stringify(data));
-                            history.push("/dashboard");
-                        })
-                        .catch(error => {
-                            console.error('Error writing document: ', error);
-                        }) 
+                            signup(email, password);
+                            history.push('/dashboard');
+                        });
                     });
                 }
             );
-        
         } catch {
             setError("Failed to create an account")
-        }
-    
+        }        
         setLoading(false);
     }
 
     return(
         <div className='dashboardContainer'>
-            <h1>Your PennyDAO Application</h1>
+            <h1>Your CHANGE-maker Application</h1>
             <h2>{error}</h2>
             <ApplicationBox>
                 <div className='form-input-divider'>
@@ -144,10 +136,10 @@ const InvestorApplication = ({location}) => {
                     <FormInput title='LinkedIn' value={linkedIn} setValue={setLinkedIn}/>
                     <FormInput title='Other.' value={other} setValue={setOther}/>
                 </div>
-                <FormInput title='Ethereum Wallet Address' value={walletAddress} setValue={setWalletAddress}/>
-                <div>
+                <div className='inputProfilePhotoContainer'>
                     <label>Profile Photo</label>
-                    <input type="file" onChange={e => handleChange(e)} />
+                    <input type="file" onChange={e => handleChange(e)} className='profilePhotoInput' style={{marginTop: '15px'}}/>  
+                    <img src={previewImage} className='previewImage' style={{marginTop: '15px'}}/>                  
                 </div>
                 <div style={{display: 'flex', justifyContent: 'flex-end', marginTop: '30px'}}>
                     <CircleButton onClick={e => { handleSubmit(e) }} disabled={loading}/>

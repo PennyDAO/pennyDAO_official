@@ -9,7 +9,7 @@ import Dashboard from "../pages/Dashboard";
 import Students from "../pages/Students";
 import StudentDetails from "../pages/StudentDetails"
 import GrantStatus from "../pages/GrantStatus";
-import Governance from "../pages/Governance";
+import Vote from "../pages/Vote";
 import ProposalDetail from "../pages/ProposalDetail";
 import EditStudentApplication from "../pages/EditStudentApplication";
 import Deposit from "../pages/Deposit";
@@ -29,7 +29,7 @@ const Content = () => {
                 <Route path="/dashboard" component={Dashboard}/>
                 <Route path="/students" component={Students}/>
                 <Route path="/grant-status" component={GrantStatus}/>
-                <Route path="/governance" component={Governance}/>
+                <Route path="/vote" component={Vote}/>
                 <Route path="/proposal/:proposal_id" component={ProposalDetail}/>
                 <Route path="/deposit" component={Deposit}/>
                 <Route path="/student/:student_id"

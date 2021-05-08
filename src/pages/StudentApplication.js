@@ -9,6 +9,7 @@ import app from '../firebase';
 import Footer from '../components/Footer/Footer';
 import Web3 from 'web3';
 import ApplicationsContract from '../artifacts/Applications.json';
+import { DAI_TOKEN_CONTRACT, PENNY_APPLICATION } from '../utils';
 
 // const BigNumber = require('bignumber.js');
 
@@ -49,6 +50,8 @@ const StudentApplication = ({location}) => {
     const [grantAmount, setGrantAmount] = useState('');
     const [youtube, setYoutube] = useState('');
     const [profileImage, setProfileImage] = useState(null);
+    const [previewImage, setPreviewImage] = useState();
+    const [imageUrl, setImageUrl] = useState('');
     const [progress, setProgress] = useState(0);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
@@ -65,6 +68,7 @@ const StudentApplication = ({location}) => {
         if (e.target.files[0]) {
             const image = e.target.files[0];
             setProfileImage(image);
+            setPreviewImage(URL.createObjectURL(e.target.files[0]));
         }
     };
 
@@ -96,32 +100,24 @@ const StudentApplication = ({location}) => {
             return setError
         if (grantAmount === '')
             return setError('Select a Grant Amount');
+        setError("")
+        setLoading(true)
         try {
-            setError("")
-            setLoading(true)
-            await signup(email, password)
-            const data = {
-                firstName,
-                lastName,
-                email,
-                phone,
-                university,
-                major,
-                gradYear,
-                description,
-                twitter,
-                instagram,
-                linkedIn,
-                youtube,
-                other,
-                walletAddress,
-                grantAmount,
-                grantPending: true,
-                role: 'Student',
-                applicationApproved: false
-            }
+            await signup(email, password);
+            // store basic information in user table
             const username = `${email.substring(0, email.indexOf('@'))}`;
+            const role = 'Student';
+            const firestore = app.firestore();
             const storage = app.storage();
+
+            const userRef = firestore.collection('users');
+            userRef.doc(email).set({
+                username,
+                role,
+                email
+            });
+
+            // add profile image url to firebase storage
             const uploadTask = storage.ref(`images/${username}`).put(profileImage);
             uploadTask.on(
                 "state_changed",
@@ -139,45 +135,59 @@ const StudentApplication = ({location}) => {
                     .ref("images")
                     .child(username)
                     .getDownloadURL()
-                    .then(imageUrl => {
-                        data.imageUrl = imageUrl;
-                        const userRef = app.firestore().collection('users');
-                        userRef.doc(username).set(data)
+                    .then(url => {
+                        setImageUrl(url);
+                        // store student information in student table
+                        const studentRef = firestore.collection('students');
+                        const profileData = {
+                            firstName,
+                            lastName,
+                            email,
+                            phone,
+                            university,
+                            major,
+                            gradYear,
+                            description,
+                            twitter,
+                            instagram,
+                            linkedIn,
+                            youtube,
+                            other,
+                            walletAddress,
+                            grantAmount,
+                            imageUrl: url,
+                            applicationID: -1,
+                            applicationStatus: 'Created',
+                            applicationSubmitted: false,
+                        }
+                        studentRef.doc(username).set(profileData)
                         .then(() => {
-                            console.log('Document successfully written');
+                            console.log('Student Information Submitted!')
+                            if (window.ethereum) {
+                                window.ethereum.send('eth_requestAccounts');
+                                window.web3 = new Web3(window.ethereum);
+                                const web3 = new Web3(window.ethereum);
+                                const contract = new web3.eth.Contract(ApplicationsContract.abi, PENNY_APPLICATION);
+                                contract.methods.createApplication([DAI_TOKEN_CONTRACT, address, parseInt(grantAmount), '']).send({
+                                    from: address
+                                })
+                                .then(res => {
+                                    console.log(res);
+                                    setData(JSON.stringify(profileData));
+                                    signup(email, password);
+                                    history.push('/dashboard');
+                                });
+                            }
+                            setData(JSON.stringify(profileData));
                             setRole('Student');
-                            setData(JSON.stringify(data));
-                            history.push("/dashboard");
-                        })
-                        .catch(error => {
-                            console.error('Error writing document: ', error);
-                        }) 
+                            history.push('/dashboard');
+                        });
                     });
                 }
             );
-        
         } catch {
             setError("Failed to create an account")
         }    
-        // We Initialize our application here
-        // TODO: FIX THE BIG NUMBER IDK WHY THIS ISNT WORKING!!
-        // const amount = new BigNumber(data.grantAmount * Math.pow(10, 18));
-        // console.log(amount);
-        // const newAmount = Web3.utils.toBN(amount);
-        // console.log(newAmount);
-
-        const dataParams = ['0xdc31ee1784292379fbb2964b3b9c4124d8f89c60', address, 100000, ''];
-
-        if (window.ethereum) {
-            await window.ethereum.send('eth_requestAccounts');
-            window.web3 = new Web3(window.ethereum);
-            const web3 = new Web3(window.ethereum);
-            const contract = new web3.eth.Contract(ApplicationsContract.abi, '0xDec8C0e31A66ed2eEf7ed54155647c9abcf49b9F');
-            contract.methods.createApplication(dataParams).send({
-                from: address
-            })
-            .then(console.log);
-        }
         setLoading(false);
     }
 
@@ -222,9 +232,10 @@ const StudentApplication = ({location}) => {
                         <label htmlFor="other">$10,000</label>
                     </FormRadioInput>
                 </div>
-                <div>
+                <div className='inputProfilePhotoContainer'>
                     <label>Profile Photo</label>
-                    <input type="file" onChange={e => handleChange(e)} />
+                    <input type="file" onChange={e => handleChange(e)} className='profilePhotoInput' style={{marginTop: '15px'}}/>  
+                    <img src={previewImage} className='previewImage' style={{marginTop: '15px'}}/>                  
                 </div>
                 <div style={{display: 'flex', justifyContent: 'flex-end', marginTop: '30px'}}>
                     <CircleButton onClick={e => { handleSubmit(e) }} disabled={loading}/>

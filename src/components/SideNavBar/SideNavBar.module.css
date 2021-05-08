@@ -59,17 +59,17 @@ img {
 }
 
 
-span:nth-of-type(1){
+.label span:nth-of-type(1){
     width: 50%;
     
 }
 
-span:nth-of-type(2){
+.label span:nth-of-type(2){
     width: 100%;
 }
 
 
-span:nth-of-type(3){
+.label span:nth-of-type(3){
     width: 75%;
 
 }

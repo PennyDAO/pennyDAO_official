@@ -1,72 +1,92 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../hooks/AuthContext';
-// import app from '../firebase';
+import app from '../firebase';
 import { NavLink } from 'react-router-dom';
 import Web3 from 'web3';
 import ApplicationsContract from '../artifacts/Applications.json';
+import { CHANGE_TOKEN_CONTRACT, PENNY_APPLICATION } from '../utils';
 
 
 const GrantStatus = () => {
 
-    const { data, address } = useAuth();
+    const { address, currentUser, setData } = useAuth();
     const [profileData, setProfileData] = useState({});
+    const [approved, setApproved] = useState(false);
 
     useEffect(() => {
-        // const userRef = app.firestore().collection('users');
-        // const username = `${currentUser.email.substring(0, currentUser.email.indexOf('@'))}`
-        // userRef.doc(username).get()
-        // .then(doc => {
-        //     if (doc.exists) {
-        //         console.log('Document Data:', doc.data());
-        //         setData(JSON.stringify(doc.data()));
-        //         setProfileData(JSON.parse(data));
-        //     }
-        //     else {
-        //         console.log('No such document!');
-        //     }
-        // });
-        setProfileData(JSON.parse(data));
-    }, [data])
+        const studentRef = app.firestore().collection('students');
+        const username = `${currentUser.email.substring(0, currentUser.email.indexOf('@'))}`
+        studentRef.doc(username).get()
+        .then(doc => {
+            if (doc.exists) {
+                setData(JSON.stringify(doc.data()));
+                setProfileData(doc.data());
+            }
+            else {
+                console.log('No such document!');
+            }
+        });
+    }, [currentUser, setData]);
 
-    const submitApplication = () => {
+    const approveApplication = () => {
         if (window.ethereum) {
             window.web3 = new Web3(window.ethereum);
-            const contract = new window.web3.eth.Contract(ApplicationsContract.abi, '0xDec8C0e31A66ed2eEf7ed54155647c9abcf49b9F');
+            const contract = new window.web3.eth.Contract(ApplicationsContract.abi, PENNY_APPLICATION);
             contract.methods.tokenOfOwnerByIndex(address, 0).call()
             .then(i => {
-                contract.methods.approve('0xCDC481031E23AEd8CbBe6e07A638298a790D445a', i).send({
+                contract.methods.approve(CHANGE_TOKEN_CONTRACT, i).send({
                     from: address
                 })
                 .then(data => {
                     console.log(data);
-                    contract.methods.submitApplication(i).send({
-                        from: address
-                    })
-                    .then(console.log)
-                    .catch(console.log);
+                    setApproved(true);
                 })
                 .catch(console.log)
-                
             })
             .catch(console.log)
         }
     }
 
+    const submitApplication = () => {
+        if (window.ethereum) {
+            window.web3 = new Web3(window.ethereum);
+            const contract = new window.web3.eth.Contract(ApplicationsContract.abi, PENNY_APPLICATION);
+            contract.methods.tokenOfOwnerByIndex(address, 0).call()
+            .then(i => {
+                contract.methods.submitApplication(i).send({
+                    from: address
+                })
+                .then(res => {
+                    const studentRef = app.firestore().collection('students');
+                    const username = `${currentUser.email.substring(0, currentUser.email.indexOf('@'))}`
+                    studentRef.doc(username).update({
+                        applicationStatus: 'Pending',
+                        applicationSubmitted: true,
+                        applicationID: i
+                    })
+                    .then(console.log)
+                    console.log(res);
+                })
+                .catch(console.log);
+            })
+            .catch(console.log)
+        }
+        
+    }
+
     return (
         <div className='dashboardContainer'>
             <h1>Grant Status</h1>
-            <div className='navLinkContainer'>
-                <NavLink to='/edit/application' className='editApplicationButton'>Edit Application</NavLink>
-            </div>
-            <p>{profileData.applicationApproved ? 'Your application has been approved!!' : 'Your application is till being processed by the PennyDAO Team.'}</p>
-            <div>
-                <button onClick={() => submitApplication()}>Click here to submit your final application.</button>
-            </div>
+            <p style={{padding: '0 10%'}}>{profileData.applicationStatus === 'Approved' ? 'Your application has been approved!! To continue, please approve, then submit your application to be reviewed by the PennyDAO community.' : 'Your application is still being processed by the PennyDAO Team.'}</p>
+            {profileData.applicationStatus === 'Approved' && <div>
+                <button onClick={() => approveApplication()}>Click here to approve your application transaction.</button>
+                {approved && <button onClick={() => submitApplication()}>Click here to submit your final application.</button>}
+            </div>}
             <div className='grantStatusContainer'>
                 <div className='grantAmountContainer'>
-                    <h2>{!(profileData.grantPending && <span>🎉</span>)}Grant Amount ({profileData.grantPending ? 'pending' : 'approved'}){!(profileData.grantPending && <span>🎉</span>)}</h2>
+                    <h2>{(profileData.applicationStatus === 'Closed' && <span>🎉</span>)} Grant Amount ({profileData.applicationStatus === 'Closed' ? 'approved' : 'pending'}) {(profileData.applicationStatus === 'Closed' && <span>🎉</span>)}</h2>
                     <h1>${profileData.grantAmount}</h1>
-                    {!profileData.grantPending && <button className='recieveButton'>Recieve Grant</button>}
+                    {profileData.applicationStatus === 'Closed' && <button className='recieveButton'>Recieve Grant</button>}
                 </div>
                 <div style={{textAlign: 'left'}} className='grantInfoContainer'>
                     <p>PennyDAO will vote to approve your grant request on May 7, 2021.</p>

@@ -256,6 +256,49 @@ select {
   margin: 10px;
 }
 
+.progress {
+  display: flex;
+  background-color: gray;
+  height: 8px;
+  border-radius: 4px;
+  width: auto;
+}
+
+.progress-bg {
+  background-color: rebeccapurple;
+  height: 8px;
+  border-radius: 4px;
+}
+
+.percentSpan {
+  width: auto;
+}
+
+.closeModalButton {
+  height: 22px;
+  width: 22px;
+  border-radius: 50%;
+  color: white;
+  text-decoration: none;
+  border: none;
+  background-color: #CEAF7F;
+}
+
+.inputProfilePhotoContainer {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  margin: 15px 0;
+  flex: 1;
+}
+
+.previewImage {
+  border-radius: 50%;
+  width: 80px;
+  height: 80px;
+  object-fit: cover;
+}
+
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
 

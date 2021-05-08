@@ -36,14 +36,13 @@ const NavSegment = ({children, to, title}) => {
 const LogoutSegment = ({children, onClick, title}) => {
     return (
         <div className={styles.navSegment} onClick={onClick}>         
-            <span 
-                className={styles.navLink}
-                activeClassName={styles.navLinkActive}>
+            <div 
+                className={styles.navLink}>
                 <div className={styles.navSegmentImage}>
                    {children}
                 </div>
                 <span>{title}</span>
-            </span>
+            </div>
         </div>
     )
 }
@@ -117,9 +116,9 @@ const MobileNavMenu = ({isOpen, onClick}) => {
                 {
                 currentUser && 
                 <li>
-                    <a className={styles.navLink} onClick={() => {logout(); onClick(); history.push('/')}}>
+                    <p className={styles.navLink} onClick={() => {logout(); onClick(); history.push('/')}}>
                         Logout
-                    </a>
+                    </p>
                 </li>
                 }
             </ul>
@@ -174,7 +173,7 @@ const SideNavBar = () => {
                 }
                 {
                 currentUser && role === 'Investor' &&
-                <NavSegment to='/governance' title='Governance'>
+                <NavSegment to='/vote' title='Vote'>
                     <GrantStatusLogo/>
                 </NavSegment>
                 }

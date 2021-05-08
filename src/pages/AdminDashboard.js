@@ -12,12 +12,10 @@ const AdminDashboard = () => {
     const [query, setQuery] = useState('');
 
     useEffect(() => {
-
         const firestore = app.firestore();
-        const userRef = firestore.collection('users');
-        const userListRef = userRef.where("role", "==", "Student");
+        const studentRef = firestore.collection('students');
         let tempList = []
-        userListRef.get()
+        studentRef.get()
         .then(querySnapshot => {
             querySnapshot.forEach((doc) => {
                 if (doc.data().email !== currentUser.email)
@@ -28,20 +26,23 @@ const AdminDashboard = () => {
         .catch(error => {
             console.log('Error getting document:', error);
         });
-    }, [currentUser])
+    }, [currentUser]);
 
     const approveApplication = (email) => {
-        console.log(email)
-        const userRef = app.firestore().collection('users');
+        // get student collection
+        const studentRef = app.firestore().collection('students');
         const username = `${email.substring(0, email.indexOf('@'))}`
-        userRef.doc(username).get()
+        // get and set application status to 'Approved'
+        studentRef.doc(username).get()
         .then(doc => {
             if (doc.exists) {
                 let x = doc.data();
-                console.log(x);
-                x.applicationApproved = true;
-                userRef.doc(username).set(x)
-                .then(console.log)
+                x.applicationStatus = 'Approved';
+                studentRef.doc(username).set(x)
+                .then(res => {
+                    console.log(`${username}'s application has been approved.`);
+                    window.location.reload();
+                })
                 .catch(console.log)
             }
             else {
@@ -55,15 +56,9 @@ const AdminDashboard = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(category, query)
         const firestore = app.firestore();
-        const userRef = firestore.collection('users');
-        let userListRef;
-        if (category !== '' && query !== '')
-            userListRef = userRef.where("role", "==", "Student").where(category, "==", query);
-        else 
-            userListRef = userRef.where("role", "==", "Student");
-
+        const studentRef = firestore.collection('students');
+        const userListRef = (category !== '' && query !== '') ? studentRef.where(category, "==", query) : studentRef;
         let tempList = []
         userListRef.get()
         .then(querySnapshot => {
@@ -101,7 +96,7 @@ const AdminDashboard = () => {
             <div className='studentsContainer'>
                 {studentList.map(student => {
                     return(
-                        <UserBox data={student} onClick={() => approveApplication(student.email)}/>
+                        <UserBox data={student} onClick={() => approveApplication(student.email)} key={`${student.email}`}/>
                     )
                 })}
             </div>

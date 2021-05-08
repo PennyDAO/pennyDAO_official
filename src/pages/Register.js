@@ -64,7 +64,6 @@ const Register = () => {
                             onClick={e => 
                                 {
                                     e.preventDefault(); 
-                                    // TODO: Email verfication
                                     if (email === '')
                                         return setError('Email is empty')
                                     if (password === '')
@@ -85,7 +84,7 @@ const Register = () => {
                         style={customStyles}
                         ariaHideApp={false}
                     >
-                        <button onClick={closeModal}>x</button>
+                        <button onClick={closeModal} className='closeModalButton'>x</button>
                         <h1>Are you a...</h1>
                         <form className='modal-form'>
                             <button onClick={e => {e.preventDefault(); setIsStudent(true);}} className={isStudent ? 'enabled' : 'disabled'}>
@@ -93,10 +92,15 @@ const Register = () => {
                             </button>
                             <h2>or</h2>
                             <button onClick={e => {e.preventDefault(); setIsStudent(false);}} className={isStudent ? 'disabled' : 'enabled'}>
-                                Investor
+                                CHANGE-maker
                             </button>
                             <div style={{display: 'flex', justifyContent: 'flex-end', marginTop: '30px'}}>
-                                <CircleButton disabled={isStudent===null} onClick={e => {e.preventDefault(); isStudent ? history.push('/student-application', {state: {email, password}}) : history.push('/investor-application', {state: {email, password}})}}/>
+                                <CircleButton 
+                                    disabled={isStudent===null} 
+                                    onClick={e => {
+                                        e.preventDefault(); 
+                                        isStudent ? history.push('/student-application', {state: {email, password}}) : history.push('/investor-application', {state: {email, password}})}
+                                    }/>
                             </div>
                         </form>
                     </Modal>

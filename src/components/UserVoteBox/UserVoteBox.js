@@ -1,24 +1,27 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import styles from './UserBox.module.css';
+import styles from './UserVoteBox.module.css';
 import { useAuth } from '../../hooks/AuthContext';
 
-const UserBox = ({data, onClick}) => {
+const UserVoteBox = ({data, onClick}) => {
 
     const { role, currentUser } = useAuth();
 
     return (
         <div className={styles.container}>
+            <p className={styles.applicationStatus} style={{backgroundColor: data.applicationStatus === 'Active' ? 'red' : data.applicationStatus === 'Pending' ? 'blue' : 'purple'}}>
+                {data.applicationStatus}
+            </p>
             <img src={data.imageUrl} className={styles.img} alt={`${data.firstName} ${data.lastName} profile pic`}/>
             <h2>{data.firstName} {data.lastName}</h2>
             <p className={styles.university}>{data.university}</p>
-            <p className={styles.major}>{data.major}</p>
+            <p className={styles.university}>Grant Amount: {data.grantAmount}</p>
             <NavLink 
-                to={{pathname: `/student/${data.email.substring(0, data.email.indexOf('@'))}`, state: {email: data.email}}}
+                to={{pathname: `/proposal/${data.email.substring(0, data.email.indexOf('@'))}`, state: {data: data}}}
                 className={styles.navLink}>
-                Visit Student
+                View Proposal
             </NavLink>
-            {currentUser && role === 'Admin' && data.applicationStatus === 'Created' && <div style={{marginTop: '20px', width: '40%', margin: '0 auto', cursor: 'pointer'}}>
+            {currentUser && role === 'Admin' && !data.applicationApproved && <div style={{marginTop: '20px'}}>
                 <p onClick={onClick} className={styles.navLink}>
                     Approve Application
                 </p>
@@ -27,4 +30,4 @@ const UserBox = ({data, onClick}) => {
     );
 }
 
-export default UserBox;
+export default UserVoteBox;
