@@ -22,7 +22,7 @@ const StudentProfile = ({data}) => {
         <div className={styles.container}>
             <div className={styles.imgContainer}>
                 <img src={data.imageUrl} className={styles.img} alt={`${data.firstName} ${data.lastName} profile`}/>
-                <p className={data.applicationStatus ? styles.grantStatus : styles.grantStatusActive}>{data.applicationStatus !== 'Closed' ? 'Grant Pending' : 'Grant Approved!'}</p>
+                {/* <p className={data.applicationStatus ? styles.grantStatus : styles.grantStatusActive}>{data.applicationStatus !== 'Closed' ? 'Grant Pending' : 'Grant Approved!'}</p> */}
                 {data.email === currentUser.email && <div className='navLinkContainer'>
                     <NavLink to='/edit/application' className='editApplicationButton'>Edit Application</NavLink>
                 </div>}
@@ -36,9 +36,6 @@ const StudentProfile = ({data}) => {
                 <div className={styles.textContainer}>
                     <InfoBox 
                         title='Major/Area of Focus' 
-                        subTitle={data.major}/>
-                    <InfoBox 
-                        title='Orginizations' 
                         subTitle={data.major}/>
                     <div style={{width: '100%'}}>
                         <InfoBox 

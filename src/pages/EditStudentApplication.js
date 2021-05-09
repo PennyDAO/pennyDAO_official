@@ -51,6 +51,7 @@ const EditStudentApplication = () => {
     const [progress, setProgress] = useState(0);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
+    const [previewImage, setPreviewImage] = useState();
     const [profileData, setProfileData] = useState({});
 
     const { setRole, setData, currentUser, data, address } = useAuth();
@@ -99,6 +100,7 @@ const EditStudentApplication = () => {
         if (e.target.files[0]) {
             const image = e.target.files[0];
             setProfileImage(image);
+            setPreviewImage(URL.createObjectURL(e.target.files[0]));
         }
     };
 
@@ -171,7 +173,7 @@ const EditStudentApplication = () => {
                             applicationStatus: 'Created',
                             applicationSubmitted: false,
                         }
-                        studentRef.doc(username).set(newProfileData)
+                        studentRef.doc(username).update(newProfileData)
                         .then(() => {
                             console.log('Student Information Subbmitted!')
                             if (window.ethereum) {
@@ -239,9 +241,10 @@ const EditStudentApplication = () => {
                         <label htmlFor="other">$10,000</label>
                     </FormRadioInput>
                 </div>
-                <div>
+                <div className='inputProfilePhotoContainer'>
                     <label>Profile Photo</label>
-                    <input type="file" onChange={e => handleChange(e)} />
+                    <input type="file" onChange={e => handleChange(e)} className='profilePhotoInput' style={{marginTop: '15px'}}/>  
+                    <img src={previewImage} className='previewImage' style={{marginTop: '15px'}}/>                  
                 </div>
                 <div style={{display: 'flex', justifyContent: 'flex-end', marginTop: '30px'}}>
                     <CircleButton onClick={e => { handleSubmit(e) }} disabled={loading}/>

@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import Footer from '../components/Footer/Footer';
 import InvestorProfile from '../components/InvestorProfile/InvestorProfile';
 import StudentProfile from '../components/StudentProfile/StudentProfile';
-import UserProfile from '../components/UserProfile/UserProfile';
 import { useAuth } from '../hooks/AuthContext';
 
 const Dashboard = () => {

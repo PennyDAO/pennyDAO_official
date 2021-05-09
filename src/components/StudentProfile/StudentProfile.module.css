@@ -40,11 +40,13 @@
 }
 
 .grantStatus {
-    background-color: gray;
+    background-color: rgb(75, 75, 75);
     color: black;
     border-radius: 5px;
     padding: 5px 5px;
     width: 50%;
+    color: white;
+    margin-bottom: 0;
 }
 
 .grantStatusActive {

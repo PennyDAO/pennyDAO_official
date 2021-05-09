@@ -167,16 +167,20 @@ select {
   border-radius: 30px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   margin: 0 10%;
-  display: inline-block;
+  width: 60%;
+  display: block;
 }
 
 .recieveButton {
   text-decoration: none;
+  font-size: 1rem;
   color: white;
   background-color: #CEAF7F;
   border-radius: 5px;
-  padding: 5px 10px;
-  font-size: 0.75rem;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  margin-bottom: 15px;
 }
 
 .depositInputContainer {
@@ -299,6 +303,36 @@ select {
   object-fit: cover;
 }
 
+.applicationButton {
+  text-decoration: none;
+  color: white;
+  background-color: #CEAF7F;
+  border-radius: 5px;
+  padding: 8px 12px;
+  font-size: 0.75rem;
+  margin: 0 20px;
+  border: none;
+  cursor: pointer;
+}
+
+.applicationButton:disabled {
+  background-color: gray;
+}
+
+.loadingScreen {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100vw;
+  height: 100vh;
+  background-color: #a7a7a7;
+  opacity: 0.5;
+  top: 0;
+  left: 0;
+  z-index: 20;
+}
+
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
 
@@ -335,6 +369,13 @@ select {
 
   .dashboardContainer {
     padding-left: 15%;
+  }
+
+  .dashboardGrantStatusContainer {
+    padding-left: 15%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
   }
 
   .dashboardWalletContainer {

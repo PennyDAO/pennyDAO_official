@@ -8,7 +8,6 @@ import Modal from 'react-modal';
 import { useHistory } from "react-router-dom"
 
 import CircleButton from '../components/CircleButton/CircleButton';
-import Footer from '../components/Footer/Footer';
 
 const customStyles = {
     content : {
@@ -22,7 +21,8 @@ const customStyles = {
         backgroundColor       : '#FFFAF2',
         borderRadius          : '30px',
         boxShadow             : '0px 4px 4px rgba(0, 0, 0, 0.25)',
-        border                : 'none'
+        border                : 'none',
+        zIndex                : '100'
     }
 };
 
@@ -80,7 +80,7 @@ const Register = () => {
                     <Modal
                         isOpen={modalIsOpen}
                         onRequestClose={closeModal}
-                        contentLabel="Example Modal"
+                        contentLabel="Register Modal"
                         style={customStyles}
                         ariaHideApp={false}
                     >
@@ -106,7 +106,6 @@ const Register = () => {
                     </Modal>
                 </form>
             </WrapperBox>
-            <Footer />
         </div>
     );
 }

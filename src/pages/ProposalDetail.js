@@ -39,8 +39,6 @@ const ProposalDetails = ({location}) => {
         var date = a.getDate();
         var hour = a.getHours();
         var min = a.getMinutes();
-        var sec = a.getSeconds();
-        var time = date + ' ' + month + ' ' + year + ' ' + hour + ':' + min + ':' + sec ;
         var time = `${month} ${date}, ${year}, ${formatAMPM(hour, min)}`
         return time;
     }

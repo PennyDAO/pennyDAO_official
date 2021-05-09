@@ -10,8 +10,7 @@ import Footer from '../components/Footer/Footer';
 import Web3 from 'web3';
 import ApplicationsContract from '../artifacts/Applications.json';
 import { DAI_TOKEN_CONTRACT, PENNY_APPLICATION } from '../utils';
-
-// const BigNumber = require('bignumber.js');
+import Loader from "react-loader-spinner";
 
 /**
  * Checks if the given string is an address
@@ -51,7 +50,7 @@ const StudentApplication = ({location}) => {
     const [youtube, setYoutube] = useState('');
     const [profileImage, setProfileImage] = useState(null);
     const [previewImage, setPreviewImage] = useState();
-    const [imageUrl, setImageUrl] = useState('');
+    // const [imageUrl, setImageUrl] = useState('');
     const [progress, setProgress] = useState(0);
     const [error, setError] = useState('');
     const [loading, setLoading] = useState(false);
@@ -136,7 +135,7 @@ const StudentApplication = ({location}) => {
                     .child(username)
                     .getDownloadURL()
                     .then(url => {
-                        setImageUrl(url);
+                        // setImageUrl(url);
                         // store student information in student table
                         const studentRef = firestore.collection('students');
                         const profileData = {
@@ -163,36 +162,42 @@ const StudentApplication = ({location}) => {
                         studentRef.doc(username).set(profileData)
                         .then(() => {
                             console.log('Student Information Submitted!')
-                            if (window.ethereum) {
-                                window.ethereum.send('eth_requestAccounts');
-                                window.web3 = new Web3(window.ethereum);
-                                const web3 = new Web3(window.ethereum);
-                                const contract = new web3.eth.Contract(ApplicationsContract.abi, PENNY_APPLICATION);
-                                contract.methods.createApplication([DAI_TOKEN_CONTRACT, address, parseInt(grantAmount), '']).send({
-                                    from: address
-                                })
-                                .then(res => {
-                                    console.log(res);
-                                    setData(JSON.stringify(profileData));
-                                    signup(email, password);
-                                    history.push('/dashboard');
-                                });
-                            }
-                            setData(JSON.stringify(profileData));
-                            setRole('Student');
-                            history.push('/dashboard');
                         });
+                        if (window.ethereum) {
+                            window.ethereum.send('eth_requestAccounts');
+                            window.web3 = new Web3(window.ethereum);
+                            const web3 = new Web3(window.ethereum);
+                            const contract = new web3.eth.Contract(ApplicationsContract.abi, PENNY_APPLICATION);
+                            contract.methods.createApplication([DAI_TOKEN_CONTRACT, address, parseInt(grantAmount), '']).send({
+                                from: address
+                            })
+                            .then(res => {
+                                setData(JSON.stringify(profileData));
+                                setRole('Student');
+                                setLoading(false);
+                                history.push('/dashboard');
+                            });
+                        }
                     });
                 }
             );
         } catch {
             setError("Failed to create an account")
         }    
-        setLoading(false);
     }
 
     return(
         <div className='dashboardContainer'>
+            {loading && 
+            <div className='loadingScreen'>
+                <Loader 
+                    type="ThreeDots"
+                    color="#F7F2EA"
+                    height={100}
+                    width={100}
+                />
+            </div>
+            }
             <h1>Your PennyDAO Application</h1>
             <h2 style={{color: 'red'}}>{error}</h2>
             <ApplicationBox>
@@ -235,7 +240,7 @@ const StudentApplication = ({location}) => {
                 <div className='inputProfilePhotoContainer'>
                     <label>Profile Photo</label>
                     <input type="file" onChange={e => handleChange(e)} className='profilePhotoInput' style={{marginTop: '15px'}}/>  
-                    <img src={previewImage} className='previewImage' style={{marginTop: '15px'}}/>                  
+                    <img src={previewImage} className='previewImage' style={{marginTop: '15px'}} alt='preview text'/>                  
                 </div>
                 <div style={{display: 'flex', justifyContent: 'flex-end', marginTop: '30px'}}>
                     <CircleButton onClick={e => { handleSubmit(e) }} disabled={loading}/>

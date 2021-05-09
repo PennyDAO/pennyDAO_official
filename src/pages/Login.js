@@ -6,7 +6,6 @@ import CircleButton from '../components/CircleButton/CircleButton';
 
 import { useAuth } from '../hooks/AuthContext';
 import { useHistory } from "react-router-dom"
-import Footer from '../components/Footer/Footer';
 
 import app from '../firebase';
 
@@ -84,7 +83,6 @@ const Login = () => {
                     <CircleButton disabled={!(email && password) || loading} onClick={e => handleSubmit(e)}/>
                 </div>  
             </WrapperBox>
-            <Footer />
         </div>
     );
 }

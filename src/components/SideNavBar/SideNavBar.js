@@ -8,6 +8,7 @@ import { ReactComponent as StudentsLogo } from '../../images/students.svg'
 import { ReactComponent as GrantStatusLogo } from '../../images/grant-status.svg'
 import { ReactComponent as LogoutLogo } from '../../images/logout.svg'
 import { ReactComponent as DepositLogo } from '../../images/deposit.svg';
+import { ReactComponent as RegisterLogo } from '../../images/register.svg'
 
 const PennyDAOLogo = ({onClick, alt}) => {
     return(
@@ -150,7 +151,7 @@ const SideNavBar = () => {
                 {
                     !currentUser && 
                     <NavSegment to='/register' title='Register'>
-                        <ProfileLogo/>
+                        <RegisterLogo/>
                     </NavSegment>
                 }
                 {

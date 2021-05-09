@@ -18,7 +18,7 @@ const Students = () => {
         studentRef.get()
         .then(querySnapshot => {
             querySnapshot.forEach((doc) => {
-                if (doc.data().email !== currentUser.email)
+                if (doc.data().email !== currentUser.email && doc.data() !== {})
                     tempList.push(doc.data());
             });
             setStudentList(tempList);
@@ -26,7 +26,7 @@ const Students = () => {
         .catch(error => {
             console.log('Error getting document:', error);
         });
-    }, [currentUser]);
+    }, []);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -75,7 +75,6 @@ const Students = () => {
                     )
                 })}
             </div>
-            
         </div>
     )
 }

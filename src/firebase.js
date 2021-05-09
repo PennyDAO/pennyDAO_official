@@ -4,15 +4,14 @@ import 'firebase/firestore';
 import 'firebase/storage';
 
 const app = firebase.initializeApp({
-    apiKey: "AIzaSyCuwxHe8GV2t81ce_Ew16IjxYZnLbkDqrw",
-    authDomain: "pennydao-74ee3.firebaseapp.com",
-    databaseURL: "https://pennydao-74ee3-default-rtdb.firebaseio.com",
-    projectId: "pennydao-74ee3",
-    storageBucket: "pennydao-74ee3.appspot.com",
-    messagingSenderId: "620156403931",
-    appId: "1:620156403931:web:67aff5ba076539fc9b8cfe",
-    measurementId: "G-VFC0WW8FVF"
+    apiKey: "AIzaSyAqSGFG99u16nrognDzTgiqAnC5XbkoCWE",
+    authDomain: "pennydao-dapp-505ef.firebaseapp.com",
+    projectId: "pennydao-dapp-505ef",
+    storageBucket: "pennydao-dapp-505ef.appspot.com",
+    messagingSenderId: "1090120733647",
+    appId: "1:1090120733647:web:c7bac4545f6ec381b238ba"
 });
+
 
 export const auth = app.auth();
 export default app;

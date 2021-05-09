@@ -2,7 +2,6 @@ import React from 'react';
 import styles from './InvestorProfile.module.css';
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTwitter, faInstagram, faLinkedin } from "@fortawesome/free-brands-svg-icons";
-import { useAuth } from '../../hooks/AuthContext';
 
 const InfoBox = ({title, subTitle}) => {
     return (

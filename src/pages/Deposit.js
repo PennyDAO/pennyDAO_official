@@ -48,7 +48,7 @@ const Deposit = () => {
             const web3 = new Web3(window.ethereum);
             const num = depositAmount;
             const total = new BN(num.toString());
-            let x = Math.pow(10, 18);
+            let x = Math.pow(10, 15);
             const power = new BN(x.toString());
             const newTotal = total.mul(power);
             const contract = new web3.eth.Contract(DepositContract.abi, CHANGE_TOKEN_CONTRACT);
@@ -57,8 +57,8 @@ const Deposit = () => {
             })
             .then(data => {
                 console.log(data);
-                // getCHANGEAmount();
-                // getDAIAmount();
+                getCHANGEAmount();
+                getDAIAmount();
             })
         }
     }
@@ -68,7 +68,7 @@ const Deposit = () => {
             const web3 = new Web3(window.ethereum);
             const num = depositAmount;
             const total = new BN(num.toString());
-            let x = Math.pow(10, 18);
+            let x = Math.pow(10, 15);
             const power = new BN(x.toString());
             const newTotal = total.mul(power);
             const contract = new web3.eth.Contract(ERC20Contract.abi, DAI_TOKEN_CONTRACT);
@@ -78,8 +78,8 @@ const Deposit = () => {
             .then(data => {
                 console.log(data);
                 setApproved(true);
-                // getCHANGEAmount();
-                // getDAIAmount();
+                getCHANGEAmount();
+                getDAIAmount();
             })
         }
     }
