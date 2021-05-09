@@ -188,49 +188,43 @@ select {
 }
 
 .depositInput {
-  padding: 5px 10px;
-  background-color: #FFFAF2;
-  border-radius: 5px;
-  border: #CEAF7F 2px solid;
-  margin-bottom: 20px;
+  background-color: #F7F2EA;
+  border: none;
+  border-radius: 5px 0 0 5px !important;
+  box-shadow: none !important;
+  border: black 2px solid !important;
 }
 
-.depositInputButton {
-  text-decoration: none;
-  color: white;
+.depositButton {
   background-color: #CEAF7F;
-  border-radius: 5px;
+  border-radius: 0 5px 5px 0;
   padding: 5px 10px;
-  font-size: 0.75rem;
-  border: #CEAF7F 3px solid;
-  margin: 10px;
+  border: black 2px solid !important;
+  border-left: none !important;
+  color: white;
+  height: 1.5rem;
+  height: 30px;
+  cursor: pointer;
+  font-family: 'Righteous';
 }
 
-.depositInput[disabled] {
-  padding: 5px 10px;
-  background-color: #636261;
-  border-radius: 5px 0 0 5px;
-  border: #636261 2px solid;
-  color: white;
-}
-
-.depositInputButton[disabled] {
-  text-decoration: none;
-  color: white;
-  background-color: #636261;
-  border-radius: 5px;
-  padding: 5px 10px;
-  font-size: 0.75rem;
-  border: #636261 3px solid;
+.depositButton:hover {
+  background-color: #A58C6E;
 }
 
 .percentButton {
   padding: 5px 10px;
   background-color: #CEAF7F;
   border-radius: 5px;
-  bordeR: none;
-  margin: 0 10px;
+  border: black 2px solid;
+  margin: 0 5px;
   color: white;
+  font-family: 'Righteous';
+  cursor: pointer;
+}
+
+.percentButton:hover {
+  background-color: #A58C6E;
 }
 
 .approveButton {
@@ -333,6 +327,24 @@ select {
   z-index: 20;
 }
 
+.proposalContainer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.voteButton {
+  text-decoration: none;
+  color: white;
+  background-color: #CEAF7F;
+  border-radius: 5px;
+  padding: 8px 12px;
+  font-size: 0.75rem;
+  border: none;
+  cursor: pointer;
+}
+
 /* Extra small devices (phones, 600px and down) */
 @media only screen and (max-width: 600px) {
 
@@ -381,6 +393,14 @@ select {
   .dashboardWalletContainer {
     display: flex;
     justify-content: flex-end;
+  }
+
+  .proposalContainer {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: flex-start;
+    margin-left: 50px;
   }
 }
 

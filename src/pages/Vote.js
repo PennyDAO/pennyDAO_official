@@ -34,9 +34,9 @@ const Vote = () => {
                 .then(querySnapshot => {
                     querySnapshot.forEach((doc) => {
                         const docData = doc.data();
-                        console.log('application_id', application_id);
-                        console.log(docData);
-                        if (application_id === docData.applicationID || docData.applicationStatus === 'Active') {
+                        if (docData.applicationStatus === 'Closed')
+                            closedList.push(docData);
+                        else if (application_id === docData.applicationID || docData.applicationStatus === 'Active') {
                             docData.applicationStatus = 'Active';
                             activeList.push(docData);
                             // update the docData document from Pending -> Active
@@ -45,12 +45,44 @@ const Vote = () => {
                             studentRef.doc(username).update({
                                 applicationStatus: 'Active',
                             })
-                            .then(console.log)
+                            .then(console.log(`${username} updated`))
                         }
                         else if (docData.applicationStatus === 'Pending')
                             pendingList.push(docData);
-                        else if (docData.applicationStatus === 'Closed')
+                        
+                        allList.push(docData);
+                    });
+                    setAllList(allList);
+                    setPendingList(pendingList);
+                    setActiveList(activeList);
+                    setClosedList(closedList);
+                })
+                .catch(error => {
+                    console.log('Error getting document:', error);
+                });
+            })
+            .catch(e => {
+                console.log(e);
+                studentRef.where('applicationSubmitted', '==', true).get()
+                .then(querySnapshot => {
+                    querySnapshot.forEach((doc) => {
+                        const docData = doc.data();
+                        if (docData.applicationStatus === 'Closed')
                             closedList.push(docData);
+                        else if (docData.applicationStatus === 'Active') {
+                            docData.applicationStatus = 'Active';
+                            activeList.push(docData);
+                            // update the docData document from Pending -> Active
+                            const studentRef = app.firestore().collection('students');
+                            const username = `${docData.email.substring(0, docData.email.indexOf('@'))}`
+                            studentRef.doc(username).update({
+                                applicationStatus: 'Active',
+                            })
+                            .then(console.log(`${username} updated`))
+                        }
+                        else if (docData.applicationStatus === 'Pending')
+                            pendingList.push(docData);
+                        
                         allList.push(docData);
                     });
                     setAllList(allList);

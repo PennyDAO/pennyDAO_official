@@ -62,8 +62,7 @@ const GrantStatus = () => {
                         applicationSubmitted: true,
                         applicationID: i
                     })
-                    .then(console.log)
-                    console.log(res);
+                    .then(console.log);
                 })
                 .catch(console.log);
             })

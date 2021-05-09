@@ -20,14 +20,12 @@ const Layout = ({children}) => {
 
     const getAccount = async () => {
         const accounts = await window.ethereum.enable();
-        const account = accounts[0];
-        console.log(account);
+        setAddress(accounts[0]);
     }
 
     if (window.ethereum) {
         window.ethereum.on('accountsChanged', (accounts) => {
             getAccount();
-            setAddress(accounts[0]);
         })
     }
 

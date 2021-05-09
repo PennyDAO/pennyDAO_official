@@ -4,13 +4,14 @@ import { useAuth } from '../hooks/AuthContext';
 import ERC20Contract from '../artifacts/ERC20.json';
 import DepositContract from '../artifacts/Penny.json';
 import { CHANGE_TOKEN_CONTRACT, DAI_TOKEN_CONTRACT } from '../utils';
+import WrapperBox from '../components/WrapperBox/WrapperBox';
 const BN = require('bn.js');
 
 const Deposit = () => {
 
     const { address } = useAuth();
     const [daiAmount, setDaiAmount] = useState(0);
-    const [depositAmount, setDepositAmount] = useState(0);
+    const [depositAmount, setDepositAmount] = useState('');
     const [approved, setApproved] = useState(false);
     const [changeAmount, setCHANGEAmount] = useState(0);
 
@@ -48,7 +49,7 @@ const Deposit = () => {
             const web3 = new Web3(window.ethereum);
             const num = depositAmount;
             const total = new BN(num.toString());
-            let x = Math.pow(10, 15);
+            let x = Math.pow(10, 18);
             const power = new BN(x.toString());
             const newTotal = total.mul(power);
             const contract = new web3.eth.Contract(DepositContract.abi, CHANGE_TOKEN_CONTRACT);
@@ -68,7 +69,7 @@ const Deposit = () => {
             const web3 = new Web3(window.ethereum);
             const num = depositAmount;
             const total = new BN(num.toString());
-            let x = Math.pow(10, 15);
+            let x = Math.pow(10, 18);
             const power = new BN(x.toString());
             const newTotal = total.mul(power);
             const contract = new web3.eth.Contract(ERC20Contract.abi, DAI_TOKEN_CONTRACT);
@@ -87,20 +88,32 @@ const Deposit = () => {
     return (
         <div className='dashboardContainer'>
             <h1>Deposit</h1>
-            <h3>Your Wallet DAI Amount: {daiAmount} $DAI</h3>
-            <h3>Your Wallet CHANGE Amount: {changeAmount} $CHANGE</h3>
-            <input className='depositInput' onChange={e => setDepositAmount(e.target.value)} value={depositAmount}></input>
-            <div>
-                <button className='percentButton' onClick={() => setDepositAmount(0)}>0%</button>
-                <button className='percentButton' onClick={() => setDepositAmount(daiAmount * 0.25)}>25%</button>
-                <button className='percentButton' onClick={() => setDepositAmount(daiAmount * 0.50)}>50%</button>
-                <button className='percentButton' onClick={() => setDepositAmount(daiAmount * 0.75)}>75%</button>
-                <button className='percentButton' onClick={() => setDepositAmount(daiAmount)}>100%</button>
-            </div>
-            <div className='depositInputContainer'>
-                <button className='approveButton' onClick={() => approveDAI()} disabled={approved}>Approve DAI</button>
-                <button className='depositInputButton' onClick={() => depositDAI()} disabled={!approved}>Deposit</button>
-            </div>
+            <WrapperBox>
+                <div>
+                    <br/>
+                    <input 
+                        type='text' 
+                        value={depositAmount} 
+                        onChange={e => setDepositAmount(e.target.value)}
+                        className='depositInput'
+                    />
+                    <button className='depositButton' onClick={() => approved ? depositDAI() : approveDAI()}>
+                        {approved ? 'Deposit' : 'Approve'}
+                    </button>
+                    <br/>
+                    <br/>
+                    <div>
+                        <button className='percentButton' onClick={() => setDepositAmount('0')}>0%</button>
+                        <button className='percentButton' onClick={() => setDepositAmount((daiAmount * 0.25).toString())}>25%</button>
+                        <button className='percentButton' onClick={() => setDepositAmount((daiAmount * 0.50).toString())}>50%</button>
+                        <button className='percentButton' onClick={() => setDepositAmount((daiAmount * 0.75).toString())}>75%</button>
+                        <button className='percentButton' onClick={() => setDepositAmount(daiAmount.toString())}>100%</button>
+                    </div>
+                    <p>Your Wallet DAI Balance: <b>{daiAmount} $DAI</b></p>
+                    <p>Your Wallet CHANGE Balance: <b>{changeAmount} $CHANGE</b></p>
+                </div>
+            </WrapperBox>
+            
             
         </div>
     )
